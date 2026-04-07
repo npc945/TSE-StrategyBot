@@ -2,10 +2,10 @@
     "kpi": {
         "stock_id": "2454",
         "max_capital": 1775000.0,
-        "total_profit": 1184000.0,
-        "total_return_pct": 66.7,
-        "win_rate": 40.0,
-        "total_trades": 25,
+        "total_profit": 1189000.0,
+        "total_return_pct": 66.99,
+        "win_rate": 42.31,
+        "total_trades": 26,
         "current_status": "EMPTY"
     },
     "trades": [
@@ -408,6 +408,22 @@
             "price": 1705.0,
             "profit": 40000.0,
             "profit_pct": 2.4
+        },
+        {
+            "date": "2026-04-02",
+            "action": "BUY",
+            "qty": 1,
+            "price": 1465.0,
+            "profit": 0.0,
+            "profit_pct": 0.0
+        },
+        {
+            "date": "2026-04-07",
+            "action": "SELL",
+            "qty": 1,
+            "price": 1470.0,
+            "profit": 5000.0,
+            "profit_pct": 0.34
         }
     ]
 }
