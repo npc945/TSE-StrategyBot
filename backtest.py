@@ -10,69 +10,41 @@ import json
 warnings.filterwarnings('ignore')
 
 # ==========================================
-# ⚙️ 1. 設定區
+# ⚙️ 1. 環境設定與股票參數
 # ==========================================
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
 load_dotenv(env_path)
 sql_engine_url = os.getenv('sql_engine')
-STOCK_ID = 2317
+
 LOOK_BACK = 20
-AI_FEATURES = ["Trading_Volume", "Bias_20"]
-TRAIN_RATIO = 0.8  # 🌟 設定訓練集比例，回測將從後 20% 開始
+TOTAL_CAPITAL = 1000000  # 🌟 固定本金 100 萬
 
-# ==========================================
-# 🧠 2. 載入模型與 Scaler
-# ==========================================
-model = load_model(f"{STOCK_ID}_model.h5")
-scaler = joblib.load(f"{STOCK_ID}_scaler.pkl")
+# 🎯 鎖死測試集區間 (證明 AI 在這段時間內的實力)
+TEST_START = "2023-08-08"
+TEST_END = "2025-10-25"
 
-# ==========================================
-# 📊 3. 讀取 SQL 並切分「測試集」
-# ==========================================
+# 🌟 核心引擎設定檔：一次控制三檔股票的特徵與閾值
+STOCK_CONFIG = {
+    "2317": {"features": ["Trading_Volume", "Bias_20"],"ai_threshold": 0.5},
+    "2330": {"features": ["Trading_Volume", "Bias_20"],"ai_threshold": 0.5},
+    "2454": {"features": ["RSI_14", "Bias_20"],"ai_threshold": 0.5}
+}
+
 engine = create_engine(sql_engine_url)
-df_all = pd.read_sql(f"SELECT * FROM stock_data WHERE stock_id={STOCK_ID} ORDER BY date", engine)
-df_all['date'] = pd.to_datetime(df_all['date'])
-df_all['SMA_Vol_20'] = df_all['Trading_Volume'].rolling(20).mean()
-
-# 🎯 關鍵：找出測試集的起始索引
-split_idx = int(len(df_all) * TRAIN_RATIO)
-# 回測資料需要包含測試集前 LOOK_BACK 天，AI 才能計算第一筆預測
-df_test_period = df_all.iloc[split_idx - LOOK_BACK :].copy().reset_index(drop=True)
-
-print(f"📈 回測區間：{df_test_period['date'].iloc[LOOK_BACK].date()} 至今 (測試集範圍)")
 
 # ==========================================
-# 🔮 4. AI 預測區 (僅針對測試集)
+# 🚦 2. 策略濾網函數
 # ==========================================
-X_raw = df_test_period[AI_FEATURES].values
-X_scaled = scaler.transform(X_raw)
-
-Xs = []
-for i in range(len(X_scaled) - LOOK_BACK):
-    Xs.append(X_scaled[i : i + LOOK_BACK])
-X_3d = np.array(Xs)
-
-probs = model.predict(X_3d, verbose=0).flatten()
-
-# 對齊：去掉前面的 LOOK_BACK 天，這才是真正的測試集起點
-df_res = df_test_period.iloc[LOOK_BACK:].copy().reset_index(drop=True)
-df_res['AI_Prob'] = probs
-print("🧠 AI 預測機率分佈：")
-print(df_res['AI_Prob'].describe())
-# ==========================================
-# 🚦 5. 五燈獎與賣出邏輯 (沿用你的精密設計)
-# ==========================================
-def get_lights(data, i):
+def get_lights(data, i, ai_threshold):
     l = 0
-    if data['AI_Prob'].iloc[i] > 0.5: l += 1
+    if data['AI_Prob'].iloc[i] > ai_threshold: l += 1
     if data['ADX_14'].iloc[i] > 20: l += 1
     if i > 0:
         if data['close'].iloc[i] > data['SMA_20'].iloc[i] and data['SMA_20'].iloc[i] > data['SMA_20'].iloc[i-1]:
             l += 1
         if data['low'].iloc[i] > data['high'].iloc[i-1] and data['close'].iloc[i] > data['open'].iloc[i]:
             l += 1
-    # L5: 低位放量 (檢查當前索引在原始資料中的回測)
     has_low_bias = (data['Bias_20'].iloc[max(0, i-20):i] < -0.05).any()
     vol_3d_12 = (data['Trading_Volume'].iloc[max(0, i-2):i+1] > data['SMA_Vol_20'].iloc[i] * 1.2).all()
     vol_1d_20 = data['Trading_Volume'].iloc[i] > data['SMA_Vol_20'].iloc[i] * 2.0
@@ -92,113 +64,142 @@ def check_exit(data, i):
     return exit_lights >= 2
 
 # ==========================================
-#  6. 模擬回測執行 (自動算本金版)
+# 🚀 3. 自動化巡迴回測主引擎 (Main Loop)
 # ==========================================
-holding = 0
-buy_price = 0
-total_profit = 0
-trades = []
-
-max_capital_used = 0 # 新增：用來記錄這套策略「到底花了多少錢」
-
-for i in range(len(df_res)):
-    lights = get_lights(df_res, i)
-    is_last_day = (i == len(df_res) - 1)
+for STOCK_ID, config in STOCK_CONFIG.items():
+    print(f"\n{'='*50}")
+    print(f"🔄 正在執行專業回測：{STOCK_ID}")
+    print(f"📅 測試區間：{TEST_START} ~ {TEST_END}")
+    print(f"{'='*50}")
     
-    # 買進邏輯
-    if holding == 0 and not is_last_day:
-        if lights >= 3:
-            holding = 2
-            buy_price = df_res['close'].iloc[i]
-            
-            # 🌟 計算這次花了多少錢，如果破紀錄就存起來
-            current_cost = buy_price * holding * 1000 
-            if current_cost > max_capital_used: 
-                max_capital_used = current_cost
+    AI_FEATURES = config["features"]
+    AI_THRESHOLD = config["ai_threshold"]
+    
+    # 載入模型與 Scaler
+    try:
+        model = load_model(f"{STOCK_ID}_model.h5")
+        scaler = joblib.load(f"{STOCK_ID}_scaler.pkl")
+    except Exception as e:
+        print(f"❌ 找不到 {STOCK_ID} 的模型檔案，跳過。錯誤: {e}")
+        continue
+
+    # 讀取 SQL 並切分精確時間
+    df_all = pd.read_sql(f"SELECT * FROM stock_data WHERE stock_id={STOCK_ID} ORDER BY date", engine)
+    df_all['date'] = pd.to_datetime(df_all['date'])
+    df_all['SMA_Vol_20'] = df_all['Trading_Volume'].rolling(20).mean()
+
+    try:
+        start_idx = df_all[df_all['date'] >= TEST_START].index[0]
+        end_df = df_all[df_all['date'] <= TEST_END]
+        end_idx = end_df.index[-1]
+    except IndexError:
+        print(f"❌ 找不到 {STOCK_ID} 指定的日期區間，跳過。")
+        continue
+
+    df_test_period = df_all.iloc[start_idx - LOOK_BACK : end_idx + 1].copy().reset_index(drop=True)
+
+    # AI 預測
+    X_raw = df_test_period[AI_FEATURES].values
+    X_scaled = scaler.transform(X_raw)
+    Xs = [X_scaled[i : i + LOOK_BACK] for i in range(len(X_scaled) - LOOK_BACK)]
+    X_3d = np.array(Xs)
+
+    probs = model.predict(X_3d, verbose=0).flatten()
+
+    df_res = df_test_period.iloc[LOOK_BACK:].copy().reset_index(drop=True)
+    df_res['AI_Prob'] = probs
+
+    # 回測變數
+    holding_qty = 0  
+    buy_price = 0
+    total_profit = 0
+    trades = []
+
+    # 模擬執行
+    for i in range(len(df_res)):
+        lights = get_lights(df_res, i, AI_THRESHOLD)
+        is_last_day = (i == len(df_res) - 1)
+        
+        # 買進邏輯
+        if holding_qty == 0 and not is_last_day:
+            if lights >= 2:
+                weight = 1.0 if lights >= 3 else 0.5
+                invest_amount = TOTAL_CAPITAL * weight
                 
-            trades.append({'date': df_res['date'].iloc[i].strftime('%Y-%m-%d'), 'action': 'BUY', 'qty': 2, 'price': buy_price, 'profit': 0, 'profit_pct': 0.0})
-            
-        elif lights == 2:
-            holding = 1
-            buy_price = df_res['close'].iloc[i]
-            
-            # 🌟 計算這次花了多少錢，如果破紀錄就存起來
-            current_cost = buy_price * holding * 1000 
-            if current_cost > max_capital_used: 
-                max_capital_used = current_cost
+                buy_price = df_res['close'].iloc[i]
+                # 🌟 核心精華：無條件捨去小數點，只買真實零股整數
+                holding_qty = int(invest_amount / buy_price)
                 
-            trades.append({'date': df_res['date'].iloc[i].strftime('%Y-%m-%d'), 'action': 'BUY', 'qty': 1, 'price': buy_price, 'profit': 0, 'profit_pct': 0.0})
+                trades.append({
+                    'date': df_res['date'].iloc[i].strftime('%Y-%m-%d'),
+                    'action': 'BUY',
+                    'qty': holding_qty,
+                    'price': float(buy_price),
+                    'profit': 0.0,
+                    'profit_pct': 0.0
+                })
 
-    # 賣出邏輯
-    elif holding > 0:
-        if check_exit(df_res, i) or is_last_day:
-            sell_price = df_res['close'].iloc[i]
-            
-            profit = (sell_price - buy_price) * holding * 1000
-            profit_pct = ((sell_price - buy_price) / buy_price) * 100 
-            
-            total_profit += profit
-            action_name = 'SELL (結算)' if is_last_day else 'SELL'
-            
-            trades.append({'date': df_res['date'].iloc[i].strftime('%Y-%m-%d'), 'action': action_name, 'qty': holding, 'price': sell_price, 'profit': profit, 'profit_pct': round(profit_pct, 2)})
-            holding = 0
+        # 賣出與結算邏輯
+        elif holding_qty > 0:
+            if check_exit(df_res, i) or is_last_day:
+                sell_price = df_res['close'].iloc[i]
+                
+                profit = (sell_price - buy_price) * holding_qty
+                profit_pct = ((sell_price - buy_price) / buy_price) * 100 
+                
+                total_profit += profit
+                action_name = 'SELL (結算)' if is_last_day else 'SELL'
+                
+                trades.append({
+                    'date': df_res['date'].iloc[i].strftime('%Y-%m-%d'),
+                    'action': action_name,
+                    'qty': holding_qty,
+                    'price': float(sell_price),
+                    'profit': float(profit),
+                    'profit_pct': round(profit_pct, 2)
+                })
+                holding_qty = 0
 
-# ==========================================
-#  7. 成果結算
-# ==========================================
-trade_df = pd.DataFrame(trades)
+    # 結算與列印報告
+    trade_df = pd.DataFrame(trades)
+    total_profit_pct = (total_profit / TOTAL_CAPITAL) * 100
 
-# 自動計算總報酬率：用「實際動用到的最大資金」當作分母！一毛錢都不吃虧！
-if max_capital_used > 0:
-    total_profit_pct = (total_profit / max_capital_used) * 100
-else:
-    total_profit_pct = 0.0
+    print(f"💰 總投入本金上限: ${TOTAL_CAPITAL:,.0f}")
+    print(f"💵 累積總盈虧: ${total_profit:,.0f}")
+    print(f"📈 總報酬率: {total_profit_pct:.2f}%")
 
-print("\n" + "-" * 20)
-print(f"📊 {STOCK_ID} 測試集回測報告 (最大動用資金法)")
-print(f"💵 策略最高動用資金: ${max_capital_used:,.0f}")
-print(f"💰 累積總盈虧: ${total_profit:,.0f}")
-print(f"🚀 策略總報酬率: {total_profit_pct:.2f}%") # 這就是你最完美、沒有被稀釋的 % 數！
+    win_rate = 0.0
+    if not trade_df.empty:
+        sell_trades = trade_df[trade_df['action'].str.contains('SELL')]
+        if len(sell_trades) > 0:
+            win_rate = (len(sell_trades[sell_trades['profit'] > 0]) / len(sell_trades) * 100)
+            print(f"🎯 勝率: {win_rate:.2f}% | 交易次數: {len(sell_trades)} 次")
 
-if not trade_df.empty and 'profit' in trade_df.columns:
-    sell_trades = trade_df[trade_df['action'].str.contains('SELL')]
-    if len(sell_trades) > 0:
-        win_rate = (len(sell_trades[sell_trades['profit'] > 0]) / len(sell_trades) * 100)
-        print(f"🎯 勝率: {win_rate:.2f}% | 交易次數: {len(sell_trades)} 次")
+    # ==========================================
+    # 📦 4. 匯出網頁專用檔案 (proof.json & kline.csv)
+    # ==========================================
+    kpi_data = {
+        "stock_id": STOCK_ID,
+        "max_capital": float(TOTAL_CAPITAL),
+        "total_profit": float(total_profit),
+        "total_return_pct": round(total_profit_pct, 2),
+        "win_rate": round(win_rate, 2),
+        "total_trades": len(sell_trades) if 'sell_trades' in locals() else 0
+    }
 
-print("-" * 20)
-print(trade_df.to_string(index=False))
+    export_data = {"kpi": kpi_data, "trades": trade_df.to_dict(orient='records') if not trade_df.empty else []}
+    
+    # 產出 proof.json
+    json_filename = f"web_data_{STOCK_ID}_proof.json"
+    with open(json_filename, 'w', encoding='utf-8') as f:
+        json.dump(export_data, f, ensure_ascii=False, indent=4)
 
-# ==========================================
-# 📦 8. 匯出給網頁使用的 JSON 與 CSV 檔案
-# ==========================================
-import json
+    # 產出給圖表使用的 kline.csv
+    df_kline = df_res[['date', 'open', 'high', 'low', 'close', 'SMA_20']].copy()
+    df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
+    csv_filename = f"web_kline_{STOCK_ID}.csv"
+    df_kline.to_csv(csv_filename, index=False)
 
-# 1. 整理 KPI 數據
-kpi_data = {
-    "stock_id": STOCK_ID,
-    "max_capital": float(max_capital_used),
-    "total_profit": float(total_profit),
-    "total_return_pct": round(total_profit_pct, 2),
-    "win_rate": round(win_rate, 2) if 'win_rate' in locals() else 0.0,
-    "total_trades": len(sell_trades) if 'sell_trades' in locals() else 0
-}
+    print(f"✅ 成功匯出：{json_filename} 與 {csv_filename}")
 
-# 2. 轉換交易明細
-trades_list = trade_df.to_dict(orient='records')
-export_data = {"kpi": kpi_data, "trades": trades_list}
-
-# # 3. 儲存 JSON (KPI 與 交易明細)
-# json_filename = f"web_data_{STOCK_ID}_proof.json"
-# with open(json_filename, 'w', encoding='utf-8') as f:
-#     json.dump(export_data, f, ensure_ascii=False, indent=4)
-
-# # 4. 🌟 新增：儲存測試集的 K 線資料 (給 Plotly 畫圖用)
-# # 只抓取畫圖需要的欄位，減輕網頁負擔
-# df_kline = df_res[['date', 'open', 'high', 'low', 'close', 'SMA_20']].copy()
-# # 將日期格式化為字串，避免 JSON/CSV 讀取錯誤
-# df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
-# csv_filename = f"web_kline_{STOCK_ID}.csv"
-# df_kline.to_csv(csv_filename, index=False)
-
-# print(f"✅ 網頁展示資料已成功匯出：{json_filename} 與 {csv_filename}")
+print("\n🚀 所有標的回測完成，證明檔 (proof) 與 K 線檔皆已更新完畢！準備好讓網頁讀取了！")
