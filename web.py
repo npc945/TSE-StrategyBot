@@ -195,30 +195,39 @@ for msg in st.session_state.messages:
         st.write(msg["content"])
 
 # 3. 接收使用者輸入
-if prompt := st.chat_input("詢問績效，例如：『目前戰報如何？』"):
+if prompt := st.chat_input("請輸入您的指令或問題，例如：『目前戰報如何？』"):
     
+    # 顯示使用者的訊息
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
+    # 助理開始回應
     with st.chat_message("assistant"):
-        with st.spinner("🧠 正在嘗試連接 Google API..."):
+        with st.spinner("🧠 AI 正在解析系統數據..."):
             try:
-                # ⚠️ 【關鍵動作】：請直接把你申請到的 AIzaSy 開頭的那一長串金鑰，貼在下面的引號裡面！
-                # 絕對不要有空格，也不要管 .env 了，直接貼在這裡！
-                TEST_API_KEY = "AIzaSyCHH_R4yFvbNOej04RbRtRwnzuWHP8VwEg" 
+                # 讀取環境變數中的金鑰 (標準化命名)
+                # 請確保你的 .env 檔案裡面寫的是 GEMINI_API_KEY=你的新金鑰
+                api_key = os.getenv('gemini_api') 
                 
-                if TEST_API_KEY == "fuk":
-                    st.error("❌ 教授提醒：你還沒把密碼貼到程式碼裡面喔！")
+                if not api_key:
+                    st.error("⚠️ 系統提示：找不到 API 金鑰。請確認 .env 檔案中已設定 GEMINI_API_KEY。")
                 else:
                     # 初始化 API
-                    genai.configure(api_key=TEST_API_KEY)
+                    genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-2.5-flash')
                     
-                    # 縮減版的 Context (先求有，再求好)
+                    # 🌟 完整專業版的 Context (將系統的動態數據無縫餵給 LLM)
                     system_context = f"""
-                    你是一位專業的量化助理。目前標的：{STOCK_DICT.get(selected_id, '未知')}。
-                    請簡短、專業地回答：{prompt}
+                    你現在是這套「AI 量化交易系統」的專屬解說員。
+                    目前使用者正在查看的股票是：{STOCK_DICT.get(selected_id, '未知')}。
+                    這檔股票的目前系統狀態是：【{current_status}】。
+                    歷史回測總報酬率為：{kpi_proof.get('total_return_pct', 0)}%，勝率為：{kpi_proof.get('win_rate', 0)}%。
+                    每日實盤跟進累積淨利為：{kpi_daily.get('total_profit', 0)} 元。
+                    
+                    請根據上述真實系統數據，以專業、精煉且充滿自信的金融分析師語氣回答使用者的問題。
+                    絕對不要憑空捏造上述沒有提供的績效數據。
+                    使用者的問題是：{prompt}
                     """
                     
                     # 發送請求
@@ -229,5 +238,5 @@ if prompt := st.chat_input("詢問績效，例如：『目前戰報如何？』"
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
                     
             except Exception as e:
-                # 🚨 如果 Google 拒絕連線，兇手就會被印在這裡！
-                st.error(f"⚠️ 抓到兇手了！API 錯誤訊息：{str(e)}")
+                # 正式環境的專業錯誤提示
+                st.error(f"⚠️ API 呼叫發生錯誤，請稍後再試或檢查網路連線。錯誤細節：{str(e)}")
