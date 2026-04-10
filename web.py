@@ -3,7 +3,12 @@ import pandas as pd
 import plotly.graph_objects as go
 import json
 import os
+from dotenv import load_dotenv
 import google.generativeai as genai
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(current_dir, "token.env")
+load_dotenv(env_path)
 # ==========================================
 # ⚙️ 1. 頁面基本設定
 # ==========================================
@@ -215,7 +220,7 @@ if prompt := st.chat_input("請輸入您的指令或問題，例如：『目前�
                 else:
                     # 初始化 API
                     genai.configure(api_key=api_key)
-                    model = genai.GenerativeModel('gemini-2.5-flash')
+                    model = genai.GenerativeModel('gemini-3.1-flash-lite-preview')
                     
                     # 🌟 完整專業版的 Context (將系統的動態數據無縫餵給 LLM)
                     system_context = f"""

@@ -6,7 +6,7 @@
         "total_return_pct": 91.53,
         "win_rate": 43.21,
         "total_trades": 81,
-        "current_status": "EMPTY"
+        "current_status": "HOLDING"
     },
     "trades": [
         {
@@ -1304,6 +1304,14 @@
             "price": 1575.0,
             "profit": -3160.0,
             "profit_pct": -0.32
+        },
+        {
+            "date": "2026-04-10",
+            "action": "BUY",
+            "qty": 317,
+            "price": 1575.0,
+            "profit": 0.0,
+            "profit_pct": 0.0
         }
     ]
 }
