@@ -2,1083 +2,1222 @@
     "kpi": {
         "stock_id": "2317",
         "max_capital": 1000000.0,
-        "total_profit": 573640.4000000001,
-        "total_return_pct": 57.36,
-        "win_rate": 49.25,
-        "total_trades": 67
+        "total_profit": 354187.81,
+        "total_return_pct": 35.42,
+        "win_rate": 38.81,
+        "total_trades": 67,
+        "sharpe_ratio": 0.9533,
+        "max_drawdown_pct": -26.7,
+        "hold_sharpe_ratio": 1.1559,
+        "hold_return_pct": 116.29,
+        "hold_max_drawdown_pct": -50.33
     },
     "trades": [
         {
             "date": "2023-10-25",
             "action": "BUY",
-            "qty": 5050,
+            "qty": 5043,
             "price": 99.0,
+            "actual_cost": 99.14,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-10-26",
             "action": "SELL",
-            "qty": 5050,
+            "qty": 5043,
             "price": 98.5,
-            "profit": -2525.0,
-            "profit_pct": -0.51
+            "actual_cost": 98.06,
+            "profit": -5431.0,
+            "profit_pct": -1.09
         },
         {
             "date": "2023-10-30",
             "action": "BUY",
-            "qty": 5291,
+            "qty": 5283,
             "price": 94.5,
+            "actual_cost": 94.63,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-10-31",
             "action": "SELL",
-            "qty": 5291,
+            "qty": 5283,
             "price": 96.5,
-            "profit": 10582.0,
-            "profit_pct": 2.12
+            "actual_cost": 96.07,
+            "profit": 7598.67,
+            "profit_pct": 1.52
         },
         {
             "date": "2023-11-01",
             "action": "BUY",
-            "qty": 5230,
+            "qty": 5222,
             "price": 95.6,
+            "actual_cost": 95.74,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-11-02",
             "action": "SELL",
-            "qty": 5230,
+            "qty": 5222,
             "price": 97.0,
-            "profit": 7322.00000000003,
-            "profit_pct": 1.46
+            "actual_cost": 96.57,
+            "profit": 4357.99,
+            "profit_pct": 0.87
         },
         {
             "date": "2023-11-03",
             "action": "BUY",
-            "qty": 5219,
+            "qty": 5211,
             "price": 95.8,
+            "actual_cost": 95.94,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-11-06",
             "action": "SELL",
-            "qty": 5219,
+            "qty": 5211,
             "price": 96.4,
-            "profit": 3131.4000000000447,
-            "profit_pct": 0.63
+            "actual_cost": 95.97,
+            "profit": 192.36,
+            "profit_pct": 0.04
         },
         {
             "date": "2023-11-07",
             "action": "BUY",
-            "qty": 5202,
+            "qty": 5195,
             "price": 96.1,
+            "actual_cost": 96.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-11-08",
             "action": "SELL",
-            "qty": 5202,
+            "qty": 5195,
             "price": 97.0,
-            "profit": 4681.800000000029,
-            "profit_pct": 0.94
+            "actual_cost": 96.57,
+            "profit": 1734.26,
+            "profit_pct": 0.35
         },
         {
             "date": "2023-11-09",
             "action": "BUY",
-            "qty": 5107,
+            "qty": 5099,
             "price": 97.9,
+            "actual_cost": 98.04,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2023-11-10",
             "action": "SELL",
-            "qty": 5107,
+            "qty": 5099,
             "price": 97.2,
-            "profit": -3574.9000000000146,
-            "profit_pct": -0.72
+            "actual_cost": 96.77,
+            "profit": -6473.78,
+            "profit_pct": -1.3
         },
         {
             "date": "2023-11-13",
             "action": "BUY",
-            "qty": 5117,
+            "qty": 5110,
             "price": 97.7,
+            "actual_cost": 97.84,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-01-10",
             "action": "SELL",
-            "qty": 5117,
+            "qty": 5110,
             "price": 100.0,
-            "profit": 11769.099999999986,
-            "profit_pct": 2.35
+            "actual_cost": 99.56,
+            "profit": 8780.4,
+            "profit_pct": 1.76
         },
         {
             "date": "2024-02-23",
             "action": "BUY",
-            "qty": 4854,
+            "qty": 4847,
             "price": 103.0,
+            "actual_cost": 103.15,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-04-11",
             "action": "SELL",
-            "qty": 4854,
+            "qty": 4847,
             "price": 150.0,
-            "profit": 228138.0,
-            "profit_pct": 45.63
+            "actual_cost": 149.34,
+            "profit": 223880.39,
+            "profit_pct": 44.78
         },
         {
             "date": "2024-04-12",
             "action": "BUY",
-            "qty": 3322,
+            "qty": 3317,
             "price": 150.5,
+            "actual_cost": 150.71,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-04-16",
             "action": "SELL",
-            "qty": 3322,
+            "qty": 3317,
             "price": 141.0,
-            "profit": -31559.0,
-            "profit_pct": -6.31
+            "actual_cost": 140.38,
+            "profit": -34292.43,
+            "profit_pct": -6.86
         },
         {
             "date": "2024-04-17",
             "action": "BUY",
-            "qty": 3412,
+            "qty": 3408,
             "price": 146.5,
+            "actual_cost": 146.71,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-04-23",
             "action": "SELL",
-            "qty": 3412,
+            "qty": 3408,
             "price": 144.0,
-            "profit": -8530.0,
-            "profit_pct": -1.71
+            "actual_cost": 143.36,
+            "profit": -11403.04,
+            "profit_pct": -2.28
         },
         {
             "date": "2024-04-24",
             "action": "BUY",
-            "qty": 6410,
+            "qty": 6401,
             "price": 156.0,
+            "actual_cost": 156.22,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-05-30",
             "action": "SELL",
-            "qty": 6410,
+            "qty": 6401,
             "price": 176.5,
-            "profit": 131405.0,
-            "profit_pct": 13.14
+            "actual_cost": 175.72,
+            "profit": 124798.3,
+            "profit_pct": 12.48
         },
         {
             "date": "2024-06-03",
             "action": "BUY",
-            "qty": 2832,
+            "qty": 2828,
             "price": 176.5,
+            "actual_cost": 176.75,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-06-24",
             "action": "SELL",
-            "qty": 2832,
+            "qty": 2828,
             "price": 206.0,
-            "profit": 83544.0,
-            "profit_pct": 16.71
+            "actual_cost": 205.09,
+            "profit": 80136.86,
+            "profit_pct": 16.03
         },
         {
             "date": "2024-06-25",
             "action": "BUY",
-            "qty": 2369,
+            "qty": 2366,
             "price": 211.0,
+            "actual_cost": 211.3,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-02",
             "action": "SELL",
-            "qty": 2369,
+            "qty": 2366,
             "price": 204.5,
-            "profit": -15398.5,
-            "profit_pct": -3.08
+            "actual_cost": 203.6,
+            "profit": -18231.42,
+            "profit_pct": -3.65
         },
         {
             "date": "2024-07-03",
             "action": "BUY",
-            "qty": 2463,
+            "qty": 2459,
             "price": 203.0,
+            "actual_cost": 203.29,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-12",
             "action": "SELL",
-            "qty": 2463,
+            "qty": 2459,
             "price": 216.0,
-            "profit": 32019.0,
-            "profit_pct": 6.4
+            "actual_cost": 215.04,
+            "profit": 28905.36,
+            "profit_pct": 5.78
         },
         {
             "date": "2024-07-15",
             "action": "BUY",
-            "qty": 2309,
+            "qty": 2306,
             "price": 216.5,
+            "actual_cost": 216.81,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-18",
             "action": "SELL",
-            "qty": 2309,
+            "qty": 2306,
             "price": 204.0,
-            "profit": -28862.5,
-            "profit_pct": -5.77
+            "actual_cost": 203.1,
+            "profit": -31618.06,
+            "profit_pct": -6.32
         },
         {
             "date": "2024-07-22",
             "action": "BUY",
-            "qty": 2597,
+            "qty": 2593,
             "price": 192.5,
+            "actual_cost": 192.77,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-23",
             "action": "SELL",
-            "qty": 2597,
+            "qty": 2593,
             "price": 201.5,
-            "profit": 23373.0,
-            "profit_pct": 4.68
+            "actual_cost": 200.61,
+            "profit": 20313.69,
+            "profit_pct": 4.06
         },
         {
             "date": "2024-07-26",
             "action": "BUY",
-            "qty": 2604,
+            "qty": 2600,
             "price": 192.0,
+            "actual_cost": 192.27,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-29",
             "action": "SELL",
-            "qty": 2604,
+            "qty": 2600,
             "price": 193.0,
-            "profit": 2604.0,
-            "profit_pct": 0.52
+            "actual_cost": 192.15,
+            "profit": -331.82,
+            "profit_pct": -0.07
         },
         {
             "date": "2024-07-30",
             "action": "BUY",
-            "qty": 2551,
+            "qty": 2547,
             "price": 196.0,
+            "actual_cost": 196.28,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-07-31",
             "action": "SELL",
-            "qty": 2551,
+            "qty": 2547,
             "price": 198.0,
-            "profit": 5102.0,
-            "profit_pct": 1.02
+            "actual_cost": 197.12,
+            "profit": 2151.07,
+            "profit_pct": 0.43
         },
         {
             "date": "2024-08-01",
             "action": "BUY",
-            "qty": 2469,
+            "qty": 2465,
             "price": 202.5,
+            "actual_cost": 202.79,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-02",
             "action": "SELL",
-            "qty": 2469,
+            "qty": 2465,
             "price": 186.5,
-            "profit": -39504.0,
-            "profit_pct": -7.9
+            "actual_cost": 185.67,
+            "profit": -42185.58,
+            "profit_pct": -8.44
         },
         {
             "date": "2024-08-05",
             "action": "BUY",
-            "qty": 5952,
+            "qty": 5943,
             "price": 168.0,
+            "actual_cost": 168.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-06",
             "action": "SELL",
-            "qty": 5952,
+            "qty": 5943,
             "price": 167.5,
-            "profit": -2976.0,
-            "profit_pct": -0.3
+            "actual_cost": 166.76,
+            "profit": -8799.13,
+            "profit_pct": -0.88
         },
         {
             "date": "2024-08-07",
             "action": "BUY",
-            "qty": 5865,
+            "qty": 5856,
             "price": 170.5,
+            "actual_cost": 170.74,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-08",
             "action": "SELL",
-            "qty": 5865,
+            "qty": 5856,
             "price": 163.5,
-            "profit": -41055.0,
-            "profit_pct": -4.11
+            "actual_cost": 162.78,
+            "profit": -46651.53,
+            "profit_pct": -4.67
         },
         {
             "date": "2024-08-09",
             "action": "BUY",
-            "qty": 2967,
+            "qty": 2963,
             "price": 168.5,
+            "actual_cost": 168.74,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-12",
             "action": "SELL",
-            "qty": 2967,
+            "qty": 2963,
             "price": 176.0,
-            "profit": 22252.5,
-            "profit_pct": 4.45
+            "actual_cost": 175.22,
+            "profit": 19203.46,
+            "profit_pct": 3.84
         },
         {
             "date": "2024-08-13",
             "action": "BUY",
-            "qty": 2762,
+            "qty": 2758,
             "price": 181.0,
+            "actual_cost": 181.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-14",
             "action": "SELL",
-            "qty": 2762,
+            "qty": 2758,
             "price": 185.5,
-            "profit": 12429.0,
-            "profit_pct": 2.49
+            "actual_cost": 184.68,
+            "profit": 9435.77,
+            "profit_pct": 1.89
         },
         {
             "date": "2024-08-15",
             "action": "BUY",
-            "qty": 2762,
+            "qty": 2758,
             "price": 181.0,
+            "actual_cost": 181.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-16",
             "action": "SELL",
-            "qty": 2762,
+            "qty": 2758,
             "price": 184.0,
-            "profit": 8286.0,
-            "profit_pct": 1.66
+            "actual_cost": 183.19,
+            "profit": 5317.08,
+            "profit_pct": 1.06
         },
         {
             "date": "2024-08-19",
             "action": "BUY",
-            "qty": 2673,
+            "qty": 2669,
             "price": 187.0,
+            "actual_cost": 187.27,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-21",
             "action": "SELL",
-            "qty": 2673,
+            "qty": 2669,
             "price": 183.5,
-            "profit": -9355.5,
-            "profit_pct": -1.87
+            "actual_cost": 182.69,
+            "profit": -12219.92,
+            "profit_pct": -2.44
         },
         {
             "date": "2024-08-22",
             "action": "BUY",
-            "qty": 2785,
+            "qty": 2781,
             "price": 179.5,
+            "actual_cost": 179.76,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-23",
             "action": "SELL",
-            "qty": 2785,
+            "qty": 2781,
             "price": 180.0,
-            "profit": 1392.5,
-            "profit_pct": 0.28
+            "actual_cost": 179.2,
+            "profit": -1535.91,
+            "profit_pct": -0.31
         },
         {
             "date": "2024-08-26",
             "action": "BUY",
-            "qty": 2747,
+            "qty": 2743,
             "price": 182.0,
+            "actual_cost": 182.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-08-27",
             "action": "SELL",
-            "qty": 2747,
+            "qty": 2743,
             "price": 180.5,
-            "profit": -4120.5,
-            "profit_pct": -0.82
+            "actual_cost": 179.7,
+            "profit": -7016.77,
+            "profit_pct": -1.4
         },
         {
             "date": "2024-08-28",
             "action": "BUY",
-            "qty": 2695,
+            "qty": 2691,
             "price": 185.5,
+            "actual_cost": 185.76,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-09-09",
             "action": "SELL",
-            "qty": 2695,
+            "qty": 2691,
             "price": 172.0,
-            "profit": -36382.5,
-            "profit_pct": -7.28
+            "actual_cost": 171.24,
+            "profit": -39087.95,
+            "profit_pct": -7.82
         },
         {
             "date": "2024-09-12",
             "action": "BUY",
-            "qty": 2816,
+            "qty": 2812,
             "price": 177.5,
+            "actual_cost": 177.75,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-09-13",
             "action": "SELL",
-            "qty": 2816,
+            "qty": 2812,
             "price": 176.0,
-            "profit": -4224.0,
-            "profit_pct": -0.85
+            "actual_cost": 175.22,
+            "profit": -7119.25,
+            "profit_pct": -1.42
         },
         {
             "date": "2024-09-16",
             "action": "BUY",
-            "qty": 2762,
+            "qty": 2758,
             "price": 181.0,
+            "actual_cost": 181.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-09-18",
             "action": "SELL",
-            "qty": 2762,
+            "qty": 2758,
             "price": 174.0,
-            "profit": -19334.0,
-            "profit_pct": -3.87
+            "actual_cost": 173.23,
+            "profit": -22140.88,
+            "profit_pct": -4.43
         },
         {
             "date": "2024-09-19",
             "action": "BUY",
-            "qty": 2832,
+            "qty": 2828,
             "price": 176.5,
+            "actual_cost": 176.75,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-09-20",
             "action": "SELL",
-            "qty": 2832,
+            "qty": 2828,
             "price": 177.0,
-            "profit": 1416.0,
-            "profit_pct": 0.28
+            "actual_cost": 176.22,
+            "profit": -1512.24,
+            "profit_pct": -0.3
         },
         {
             "date": "2024-09-23",
             "action": "BUY",
-            "qty": 2777,
+            "qty": 2773,
             "price": 180.0,
+            "actual_cost": 180.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-10-29",
             "action": "SELL",
-            "qty": 2777,
+            "qty": 2773,
             "price": 209.5,
-            "profit": 81921.5,
-            "profit_pct": 16.39
+            "actual_cost": 208.57,
+            "profit": 78521.55,
+            "profit_pct": 15.71
         },
         {
             "date": "2024-10-30",
             "action": "BUY",
-            "qty": 2364,
+            "qty": 2360,
             "price": 211.5,
+            "actual_cost": 211.8,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-11-15",
             "action": "SELL",
-            "qty": 2364,
+            "qty": 2360,
             "price": 207.0,
-            "profit": -10638.0,
-            "profit_pct": -2.13
+            "actual_cost": 206.08,
+            "profit": -13492.98,
+            "profit_pct": -2.7
         },
         {
             "date": "2024-12-03",
             "action": "BUY",
-            "qty": 2544,
+            "qty": 2540,
             "price": 196.5,
+            "actual_cost": 196.78,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-11",
             "action": "SELL",
-            "qty": 2544,
+            "qty": 2540,
             "price": 189.0,
-            "profit": -19080.0,
-            "profit_pct": -3.82
+            "actual_cost": 188.16,
+            "profit": -21885.5,
+            "profit_pct": -4.38
         },
         {
             "date": "2024-12-12",
             "action": "BUY",
-            "qty": 2652,
+            "qty": 2648,
             "price": 188.5,
+            "actual_cost": 188.77,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-13",
             "action": "SELL",
-            "qty": 2652,
+            "qty": 2648,
             "price": 186.5,
-            "profit": -5304.0,
-            "profit_pct": -1.06
+            "actual_cost": 185.67,
+            "profit": -8192.58,
+            "profit_pct": -1.64
         },
         {
             "date": "2024-12-16",
             "action": "BUY",
-            "qty": 2747,
+            "qty": 2743,
             "price": 182.0,
+            "actual_cost": 182.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-17",
             "action": "SELL",
-            "qty": 2747,
+            "qty": 2743,
             "price": 183.0,
-            "profit": 2747.0,
-            "profit_pct": 0.55
+            "actual_cost": 182.19,
+            "profit": -189.61,
+            "profit_pct": -0.04
         },
         {
             "date": "2024-12-18",
             "action": "BUY",
-            "qty": 2710,
+            "qty": 2706,
             "price": 184.5,
+            "actual_cost": 184.76,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-19",
             "action": "SELL",
-            "qty": 2710,
+            "qty": 2706,
             "price": 181.0,
-            "profit": -9485.0,
-            "profit_pct": -1.9
+            "actual_cost": 180.2,
+            "profit": -12349.74,
+            "profit_pct": -2.47
         },
         {
             "date": "2024-12-20",
             "action": "BUY",
-            "qty": 2762,
+            "qty": 2758,
             "price": 181.0,
+            "actual_cost": 181.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-23",
             "action": "SELL",
-            "qty": 2762,
+            "qty": 2758,
             "price": 185.5,
-            "profit": 12429.0,
-            "profit_pct": 2.49
+            "actual_cost": 184.68,
+            "profit": 9435.77,
+            "profit_pct": 1.89
         },
         {
             "date": "2024-12-24",
             "action": "BUY",
-            "qty": 2695,
+            "qty": 2691,
             "price": 185.5,
+            "actual_cost": 185.76,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-25",
             "action": "SELL",
-            "qty": 2695,
+            "qty": 2691,
             "price": 186.5,
-            "profit": 2695.0,
-            "profit_pct": 0.54
+            "actual_cost": 185.67,
+            "profit": -241.11,
+            "profit_pct": -0.05
         },
         {
             "date": "2024-12-26",
             "action": "BUY",
-            "qty": 2666,
+            "qty": 2662,
             "price": 187.5,
+            "actual_cost": 187.77,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-27",
             "action": "SELL",
-            "qty": 2666,
+            "qty": 2662,
             "price": 186.5,
-            "profit": -2666.0,
-            "profit_pct": -0.53
+            "actual_cost": 185.67,
+            "profit": -5570.1,
+            "profit_pct": -1.11
         },
         {
             "date": "2024-12-30",
             "action": "BUY",
-            "qty": 2702,
+            "qty": 2698,
             "price": 185.0,
+            "actual_cost": 185.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2024-12-31",
             "action": "SELL",
-            "qty": 2702,
+            "qty": 2698,
             "price": 184.0,
-            "profit": -2702.0,
-            "profit_pct": -0.54
+            "actual_cost": 183.19,
+            "profit": -5605.97,
+            "profit_pct": -1.12
         },
         {
             "date": "2025-01-02",
             "action": "BUY",
-            "qty": 2739,
+            "qty": 2735,
             "price": 182.5,
+            "actual_cost": 182.76,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-01-03",
             "action": "SELL",
-            "qty": 2739,
+            "qty": 2735,
             "price": 181.0,
-            "profit": -4108.5,
-            "profit_pct": -0.82
+            "actual_cost": 180.2,
+            "profit": -7004.3,
+            "profit_pct": -1.4
         },
         {
             "date": "2025-01-13",
             "action": "BUY",
-            "qty": 2915,
+            "qty": 2911,
             "price": 171.5,
+            "actual_cost": 171.74,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-01-14",
             "action": "SELL",
-            "qty": 2915,
+            "qty": 2911,
             "price": 174.5,
-            "profit": 8745.0,
-            "profit_pct": 1.75
+            "actual_cost": 173.73,
+            "profit": 5773.82,
+            "profit_pct": 1.15
         },
         {
             "date": "2025-01-16",
             "action": "BUY",
-            "qty": 2881,
+            "qty": 2877,
             "price": 173.5,
+            "actual_cost": 173.75,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-01-17",
             "action": "SELL",
-            "qty": 2881,
+            "qty": 2877,
             "price": 173.5,
-            "profit": 0.0,
-            "profit_pct": 0.0
+            "actual_cost": 172.73,
+            "profit": -2920.08,
+            "profit_pct": -0.58
         },
         {
             "date": "2025-01-20",
             "action": "BUY",
-            "qty": 2808,
+            "qty": 2804,
             "price": 178.0,
+            "actual_cost": 178.25,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-01-21",
             "action": "SELL",
-            "qty": 2808,
+            "qty": 2804,
             "price": 178.5,
-            "profit": 1404.0,
-            "profit_pct": 0.28
+            "actual_cost": 177.71,
+            "profit": -1524.01,
+            "profit_pct": -0.3
         },
         {
             "date": "2025-01-22",
             "action": "BUY",
-            "qty": 2777,
+            "qty": 2773,
             "price": 180.0,
+            "actual_cost": 180.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-02-03",
             "action": "SELL",
-            "qty": 2777,
+            "qty": 2773,
             "price": 165.5,
-            "profit": -40266.5,
-            "profit_pct": -8.06
+            "actual_cost": 164.77,
+            "profit": -42950.55,
+            "profit_pct": -8.59
         },
         {
             "date": "2025-02-04",
             "action": "BUY",
-            "qty": 3030,
+            "qty": 3025,
             "price": 165.0,
+            "actual_cost": 165.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-02-05",
             "action": "SELL",
-            "qty": 3030,
+            "qty": 3025,
             "price": 171.0,
-            "profit": 18180.0,
-            "profit_pct": 3.64
+            "actual_cost": 170.24,
+            "profit": 15149.8,
+            "profit_pct": 3.03
         },
         {
             "date": "2025-02-06",
             "action": "BUY",
-            "qty": 2890,
+            "qty": 2886,
             "price": 173.0,
+            "actual_cost": 173.25,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-02-10",
             "action": "SELL",
-            "qty": 2890,
+            "qty": 2886,
             "price": 174.0,
-            "profit": 2890.0,
-            "profit_pct": 0.58
+            "actual_cost": 173.23,
+            "profit": -47.55,
+            "profit_pct": -0.01
         },
         {
             "date": "2025-02-11",
             "action": "BUY",
-            "qty": 2793,
+            "qty": 2789,
             "price": 179.0,
+            "actual_cost": 179.26,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-10",
             "action": "SELL",
-            "qty": 2793,
+            "qty": 2789,
             "price": 172.0,
-            "profit": -19551.0,
-            "profit_pct": -3.91
+            "actual_cost": 171.24,
+            "profit": -22357.11,
+            "profit_pct": -4.47
         },
         {
             "date": "2025-03-14",
             "action": "BUY",
-            "qty": 2941,
+            "qty": 2936,
             "price": 170.0,
+            "actual_cost": 170.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-17",
             "action": "SELL",
-            "qty": 2941,
+            "qty": 2936,
             "price": 168.0,
-            "profit": -5882.0,
-            "profit_pct": -1.18
+            "actual_cost": 167.26,
+            "profit": -8765.87,
+            "profit_pct": -1.75
         },
         {
             "date": "2025-03-18",
             "action": "BUY",
-            "qty": 2985,
+            "qty": 2980,
             "price": 167.5,
+            "actual_cost": 167.74,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-19",
             "action": "SELL",
-            "qty": 2985,
+            "qty": 2980,
             "price": 164.0,
-            "profit": -10447.5,
-            "profit_pct": -2.09
+            "actual_cost": 163.27,
+            "profit": -13303.87,
+            "profit_pct": -2.66
         },
         {
             "date": "2025-03-20",
             "action": "BUY",
-            "qty": 3012,
+            "qty": 3007,
             "price": 166.0,
+            "actual_cost": 166.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-21",
             "action": "SELL",
-            "qty": 3012,
+            "qty": 3007,
             "price": 165.0,
-            "profit": -3012.0,
-            "profit_pct": -0.6
+            "actual_cost": 164.27,
+            "profit": -5913.79,
+            "profit_pct": -1.18
         },
         {
             "date": "2025-03-24",
             "action": "BUY",
-            "qty": 3067,
+            "qty": 3063,
             "price": 163.0,
+            "actual_cost": 163.23,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-25",
             "action": "SELL",
-            "qty": 3067,
+            "qty": 3063,
             "price": 165.0,
-            "profit": 6134.0,
-            "profit_pct": 1.23
+            "actual_cost": 164.27,
+            "profit": 3178.17,
+            "profit_pct": 0.64
         },
         {
             "date": "2025-03-26",
             "action": "BUY",
-            "qty": 3012,
+            "qty": 3007,
             "price": 166.0,
+            "actual_cost": 166.24,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-27",
             "action": "SELL",
-            "qty": 3012,
+            "qty": 3007,
             "price": 160.5,
-            "profit": -16566.0,
-            "profit_pct": -3.31
+            "actual_cost": 159.79,
+            "profit": -19385.41,
+            "profit_pct": -3.88
         },
         {
             "date": "2025-03-28",
             "action": "BUY",
-            "qty": 6493,
+            "qty": 6484,
             "price": 154.0,
+            "actual_cost": 154.22,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-03-31",
             "action": "SELL",
-            "qty": 6493,
+            "qty": 6484,
             "price": 146.0,
-            "profit": -51944.0,
-            "profit_pct": -5.19
+            "actual_cost": 145.35,
+            "profit": -57483.9,
+            "profit_pct": -5.75
         },
         {
             "date": "2025-04-01",
             "action": "BUY",
-            "qty": 3289,
+            "qty": 3284,
             "price": 152.0,
+            "actual_cost": 152.22,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-02",
             "action": "SELL",
-            "qty": 3289,
+            "qty": 3284,
             "price": 153.5,
-            "profit": 4933.5,
-            "profit_pct": 0.99
+            "actual_cost": 152.82,
+            "profit": 1984.07,
+            "profit_pct": 0.4
         },
         {
             "date": "2025-04-07",
             "action": "BUY",
-            "qty": 3610,
+            "qty": 3604,
             "price": 138.5,
+            "actual_cost": 138.7,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-08",
             "action": "SELL",
-            "qty": 3610,
+            "qty": 3604,
             "price": 125.0,
-            "profit": -48735.0,
-            "profit_pct": -9.75
+            "actual_cost": 124.45,
+            "profit": -51358.76,
+            "profit_pct": -10.27
         },
         {
             "date": "2025-04-09",
             "action": "BUY",
-            "qty": 8888,
+            "qty": 8876,
             "price": 112.5,
+            "actual_cost": 112.66,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-10",
             "action": "SELL",
-            "qty": 8888,
+            "qty": 8876,
             "price": 123.5,
-            "profit": 97768.0,
-            "profit_pct": 9.78
+            "actual_cost": 122.95,
+            "profit": 91362.44,
+            "profit_pct": 9.14
         },
         {
             "date": "2025-04-11",
             "action": "BUY",
-            "qty": 7434,
+            "qty": 7424,
             "price": 134.5,
+            "actual_cost": 134.69,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-14",
             "action": "SELL",
-            "qty": 7434,
+            "qty": 7424,
             "price": 138.5,
-            "profit": 29736.0,
-            "profit_pct": 2.97
+            "actual_cost": 137.89,
+            "profit": 23723.21,
+            "profit_pct": 2.37
         },
         {
             "date": "2025-04-15",
             "action": "BUY",
-            "qty": 3584,
+            "qty": 3579,
             "price": 139.5,
+            "actual_cost": 139.7,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-16",
             "action": "SELL",
-            "qty": 3584,
+            "qty": 3579,
             "price": 136.0,
-            "profit": -12544.0,
-            "profit_pct": -2.51
+            "actual_cost": 135.4,
+            "profit": -15391.8,
+            "profit_pct": -3.08
         },
         {
             "date": "2025-04-17",
             "action": "BUY",
-            "qty": 3717,
+            "qty": 3712,
             "price": 134.5,
+            "actual_cost": 134.69,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-18",
             "action": "SELL",
-            "qty": 3717,
+            "qty": 3712,
             "price": 135.5,
-            "profit": 3717.0,
-            "profit_pct": 0.74
+            "actual_cost": 134.9,
+            "profit": 774.88,
+            "profit_pct": 0.15
         },
         {
             "date": "2025-04-21",
             "action": "BUY",
-            "qty": 3663,
+            "qty": 3657,
             "price": 136.5,
+            "actual_cost": 136.69,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-22",
             "action": "SELL",
-            "qty": 3663,
+            "qty": 3657,
             "price": 132.0,
-            "profit": -16483.5,
-            "profit_pct": -3.3
+            "actual_cost": 131.42,
+            "profit": -19303.89,
+            "profit_pct": -3.86
         },
         {
             "date": "2025-04-23",
             "action": "BUY",
-            "qty": 3597,
+            "qty": 3592,
             "price": 139.0,
+            "actual_cost": 139.2,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-04-24",
             "action": "SELL",
-            "qty": 3597,
+            "qty": 3592,
             "price": 136.5,
-            "profit": -8992.5,
-            "profit_pct": -1.8
+            "actual_cost": 135.9,
+            "profit": -11861.1,
+            "profit_pct": -2.37
         },
         {
             "date": "2025-04-25",
             "action": "BUY",
-            "qty": 3597,
+            "qty": 3592,
             "price": 139.0,
+            "actual_cost": 139.2,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-05-22",
             "action": "SELL",
-            "qty": 3597,
+            "qty": 3592,
             "price": 153.0,
-            "profit": 50358.0,
-            "profit_pct": 10.07
+            "actual_cost": 152.32,
+            "profit": 47144.64,
+            "profit_pct": 9.43
         },
         {
             "date": "2025-06-24",
             "action": "BUY",
-            "qty": 3115,
+            "qty": 3110,
             "price": 160.5,
+            "actual_cost": 160.73,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-08-20",
             "action": "SELL",
-            "qty": 3115,
+            "qty": 3110,
             "price": 200.5,
-            "profit": 124600.0,
-            "profit_pct": 24.92
+            "actual_cost": 199.61,
+            "profit": 120929.47,
+            "profit_pct": 24.19
         },
         {
             "date": "2025-08-21",
             "action": "BUY",
-            "qty": 2427,
+            "qty": 2423,
             "price": 206.0,
+            "actual_cost": 206.29,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-10-14",
             "action": "SELL",
-            "qty": 2427,
+            "qty": 2423,
             "price": 206.0,
-            "profit": 0.0,
-            "profit_pct": 0.0
+            "actual_cost": 205.09,
+            "profit": -2919.96,
+            "profit_pct": -0.58
         },
         {
             "date": "2025-10-16",
             "action": "BUY",
-            "qty": 4484,
+            "qty": 4477,
             "price": 223.0,
+            "actual_cost": 223.32,
             "profit": 0.0,
             "profit_pct": 0.0
         },
         {
             "date": "2025-10-23",
             "action": "SELL (結算)",
-            "qty": 4484,
+            "qty": 4477,
             "price": 239.0,
-            "profit": 71744.0,
-            "profit_pct": 7.17
+            "actual_cost": 237.94,
+            "profit": 65474.56,
+            "profit_pct": 6.55
         }
     ]
 }

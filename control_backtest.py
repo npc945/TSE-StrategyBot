@@ -1,16 +1,14 @@
 import pandas as pd
 import numpy as np
 import os
-import joblib
 from sqlalchemy import create_engine
-from tensorflow.keras.models import load_model
 from dotenv import load_dotenv
 import warnings
 import json
 warnings.filterwarnings('ignore')
 
 # ==========================================
-# ⚙️ 1. 環境設定與股票字典
+# ⚙️ 1. 環境設定與對照組股票字典
 # ==========================================
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
@@ -25,19 +23,22 @@ BUY_FEE  = 0.001425
 SELL_FEE = 0.001425 + 0.003
 
 STOCK_CONFIG = {
-    "2317": {"features": ["Trading_Volume", "Bias_20"], "ai_threshold": 0.5, "test_start": "2023-08-08"},
-    "2330": {"features": ["Trading_Volume", "Bias_20"], "ai_threshold": 0.5, "test_start": "2023-08-08"},
-    "2454": {"features": ["RSI_14", "Bias_20"],         "ai_threshold": 0.5, "test_start": "2023-08-08"}
+    "2382": {"test_start": "2023-08-08"},
+    "2308": {"test_start": "2023-08-08"},
+    "2881": {"test_start": "2023-08-08"},
+    "2603": {"test_start": "2023-08-08"},
+    "1301": {"test_start": "2023-08-08"},
+    "1513": {"test_start": "2023-08-08"},
+    "2412": {"test_start": "2023-08-08"}
 }
 
 engine = create_engine(sql_engine_url)
 
 # ==========================================
-# 🚦 2. 策略濾網函數
+# 🚦 2. 純技術面策略濾網函數
 # ==========================================
-def get_lights(data, i, ai_threshold):
+def get_lights(data, i):
     l = 0
-    if data['AI_Prob'].iloc[i] > ai_threshold: l += 1
     if data['ADX_14'].iloc[i] > 20: l += 1
     if i > 0:
         if data['close'].iloc[i] > data['SMA_20'].iloc[i] and data['SMA_20'].iloc[i] > data['SMA_20'].iloc[i-1]:
@@ -63,23 +64,14 @@ def check_exit(data, i):
     return exit_lights >= 2
 
 # ==========================================
-# 🚀 3. 自動化巡迴主引擎
+# 🚀 3. 對照組自動化巡迴主引擎
 # ==========================================
 for STOCK_ID, config in STOCK_CONFIG.items():
     print(f"\n{'='*40}")
-    print(f"🔄 正在執行每日跟進：{STOCK_ID}")
+    print(f"🔄 正在執行傳統對照組回測：{STOCK_ID}")
     print(f"{'='*40}")
 
-    AI_FEATURES  = config["features"]
-    AI_THRESHOLD = config["ai_threshold"]
-    TEST_START   = config["test_start"]
-
-    try:
-        model  = load_model(f"{STOCK_ID}_model.h5")
-        scaler = joblib.load(f"{STOCK_ID}_scaler.pkl")
-    except Exception as e:
-        print(f"❌ 找不到 {STOCK_ID} 的模型或 Scaler 檔案，跳過此檔。錯誤: {e}")
-        continue
+    TEST_START = config["test_start"]
 
     df_all = pd.read_sql(f"SELECT * FROM stock_data WHERE stock_id={STOCK_ID} ORDER BY date", engine)
     df_all['date'] = pd.to_datetime(df_all['date'])
@@ -88,19 +80,11 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     try:
         start_idx = df_all[df_all['date'] >= TEST_START].index[0]
     except IndexError:
-        print(f"❌ 找不到 {STOCK_ID} 設定的起始日期 {TEST_START}，跳過。")
+        print(f"❌ 找不到 {STOCK_ID} 的資料或日期 {TEST_START}，請確認資料庫。")
         continue
 
     df_test_period = df_all.iloc[start_idx - LOOK_BACK:].copy().reset_index(drop=True)
-
-    X_raw    = df_test_period[AI_FEATURES].values
-    X_scaled = scaler.transform(X_raw)
-    Xs       = [X_scaled[i: i + LOOK_BACK] for i in range(len(X_scaled) - LOOK_BACK)]
-    X_3d     = np.array(Xs)
-
-    probs  = model.predict(X_3d, verbose=0).flatten()
     df_res = df_test_period.iloc[LOOK_BACK:].copy().reset_index(drop=True)
-    df_res['AI_Prob'] = probs
 
     # 回測主迴圈
     holding_qty      = 0
@@ -111,7 +95,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     daily_values     = []
 
     for i in range(len(df_res)):
-        lights = get_lights(df_res, i, AI_THRESHOLD)
+        lights = get_lights(df_res, i)
 
         if holding_qty == 0:
             if lights >= 2:
@@ -160,7 +144,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
 
                 trades.append({
                     'date'       : df_res['date'].iloc[i].strftime('%Y-%m-%d'),
-                    'action'     : 'HOLDING (持倉中)',
+                    'action'     : 'HOLDING',
                     'qty'        : holding_qty,
                     'price'      : round(float(current_price), 2),
                     'actual_cost': round(float(actual_sell_now), 2),
@@ -194,12 +178,11 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     drawdown     = (daily_series - rolling_max) / rolling_max
     max_drawdown = drawdown.min() * 100
 
-    # 🌟 同期單純持有：夏普比率、報酬率、最大回撤
+    # 🌟 同期單純持有：夏普、報酬率、最大回撤 (這裡幫你補齊了！)
     hold_returns    = df_res['close'].pct_change().dropna()
     hold_sharpe     = (hold_returns.mean() / hold_returns.std()) * np.sqrt(252) if hold_returns.std() > 0 else 0.0
     hold_return_pct = ((df_res['close'].iloc[-1] - df_res['close'].iloc[0]) / df_res['close'].iloc[0]) * 100
     
-    # 計算同期持有最大回撤 (Hold Max Drawdown)
     hold_series       = df_res['close'] / df_res['close'].iloc[0]
     hold_rolling_max  = hold_series.cummax()
     hold_drawdown     = (hold_series - hold_rolling_max) / hold_rolling_max
@@ -231,7 +214,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
         "hold_sharpe_ratio" : round(hold_sharpe, 4),
         "hold_return_pct"   : round(hold_return_pct, 2),
         "max_drawdown_pct"  : round(max_drawdown, 2),
-        "hold_max_drawdown_pct": round(hold_max_drawdown, 2), # 🌟 已新增
+        "hold_max_drawdown_pct": round(hold_max_drawdown, 2), # 🌟 新增這裡！
         "current_status"    : "HOLDING" if holding_qty > 0 else "EMPTY"
     }
 
@@ -247,4 +230,4 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
     df_kline.to_csv(f"web_kline_{STOCK_ID}_daily.csv", index=False)
 
-print("\n✅ 所有標的每日跟進完畢（含手續費、夏普比率、同期持有最大回撤比較）！")
+print("\n✅ 所有對照組回測完畢（含手續費、夏普比率、同期持有最大回撤比較）")

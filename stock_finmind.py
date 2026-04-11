@@ -8,12 +8,8 @@ from sql_upsert import upsert
 # columns=(
 # ['date', 'stock_id', 'Trading_Volume', 'Trading_money',
 # 'open', 'max','min', 'close', 'spread', 'Trading_turnover']
-# 2. 獲取這支 Python 檔案所在的「絕對路徑資料夾」
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# 3. 將資料夾路徑與 token.env 檔名結合
 env_path = os.path.join(current_dir, "token.env")
-
-# 4. 讀取絕對路徑下的 token.env
 load_dotenv(env_path)
 token=os.getenv('token')
 sql_engine=os.getenv("sql_engine")
@@ -24,7 +20,7 @@ today=datetime.date.today().strftime("%Y-%m-%d")#轉字串
 api=DataLoader()
 api.login_by_token(token)
 
-stock_list=["2330","2317","2603","2454","2881"]
+stock_list=["2330","2317","2603","2454","2881","2382", "2308","1301", "1513", "2412"]
 start_date="2015-01-01"
 
 def stock_data(id,start,end):
