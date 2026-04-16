@@ -2,13 +2,13 @@
     "kpi": {
         "stock_id": "2454",
         "max_capital": 1000000.0,
-        "total_profit": 709166.93,
-        "total_return_pct": 70.92,
+        "total_profit": 742304.64,
+        "total_return_pct": 74.23,
         "win_rate": 38.27,
         "total_trades": 81,
-        "sharpe_ratio": 1.0798,
-        "hold_sharpe_ratio": 1.1338,
-        "hold_return_pct": 159.42,
+        "sharpe_ratio": 1.1125,
+        "hold_sharpe_ratio": 1.1857,
+        "hold_return_pct": 174.64,
         "max_drawdown_pct": -17.85,
         "hold_max_drawdown_pct": -33.93,
         "current_status": "HOLDING"
@@ -1482,13 +1482,13 @@
             "profit_pct": 0.0
         },
         {
-            "date": "2026-04-15",
+            "date": "2026-04-16",
             "action": "HOLDING (持倉中)",
             "qty": 317,
-            "price": 1790.0,
-            "actual_cost": 1782.08,
-            "profit": 64932.66,
-            "profit_pct": 12.99
+            "price": 1895.0,
+            "actual_cost": 1886.61,
+            "profit": 98070.37,
+            "profit_pct": 19.61
         }
     ]
 }
