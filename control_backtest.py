@@ -7,6 +7,55 @@ import warnings
 import json
 warnings.filterwarnings('ignore')
 
+#LINE
+try:
+    from line import send_line_message
+except ImportError:
+    print("⚠️ 找不到 line.py 模組，LINE 通知將被忽略。")
+    def send_line_message(msg): pass
+
+def generate_trade_signal_msg(date, stock_id, action, price, is_ai_stock):
+    # 建立股票名稱字典，讓 LINE 顯示更好看
+    name_dict = {"2330": "台積電", "2454": "聯發科", "2317": "鴻海", "2382": "廣達", "2308": "台達電", "2881": "富邦金", "2603": "長榮", "1301": "台塑", "1513": "中興電", "2412": "中華電"}
+    stock_name = name_dict.get(stock_id, "台股")
+
+    if is_ai_stock:
+        strategy_title = "🧠 【AI 核心策略訊號】"
+        ai_warning = "" 
+    else:
+        strategy_title = "⚙️ 【純技術分析策略訊號】"
+        ai_warning = "\n⚠️ 系統提示：此檔標的為對照組，『並未』加入 LSTM AI 預測模型。\n----------------------"
+
+    if action == "BUY":
+        action_title = "🟢 買進 (BUY)"
+        action_advice = (
+            "📝 實單操作建議：\n"
+            "若欲跟單，請於『下個交易日開盤前』，掛【今日收盤價位】買進。\n"
+            "💡 若開盤沒有順利成交，代表股價已跳空，建議【不要追高入場】以避免滑價。"
+        )
+    elif action == "SELL":
+        action_title = "🔴 賣出 (SELL)"
+        action_advice = (
+            "📝 實單操作建議：\n"
+            "請於『下個交易日開盤前』，掛【今日收盤價位】賣出。\n"
+            "💡 若開盤未成交，建議務必於【交易日收盤前出清】。"
+        )
+    else:
+        return None 
+
+    msg = f"""{strategy_title}
+📅 日期：{date}
+----------------------
+🔎 標的：{stock_name} ({stock_id})
+🔔 動作：{action_title}
+💰 訊號價位：${price:,.2f}
+----------------------{ai_warning}
+{action_advice}
+----------------------
+⚠️ 免責聲明：
+本系統訊號僅供歷史回測與學術參考。就算跟單還是會有市場波動風險，請投資人自行評估並謹慎操作。"""
+    return msg
+
 # ==========================================
 # ⚙️ 1. 環境設定與對照組股票字典
 # ==========================================
@@ -230,4 +279,32 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
     df_kline.to_csv(f"web_kline_{STOCK_ID}_daily.csv", index=False)
 
-print("\n✅ 所有對照組回測完畢（含手續費、夏普比率、同期持有最大回撤比較）")
+ # ==========================================
+    # 📱 [新增] 6. LINE 每日最新訊號過濾與發送
+    # ==========================================
+    # 鎖定迴圈最後一天的日期與價格，確保絕不重複發送舊歷史訊號
+    last_date = df_res['date'].iloc[-1].strftime('%Y-%m-%d')
+    last_close_price = df_res['close'].iloc[-1]
+
+    # 尋找「最後一天」是否有觸發 BUY 或 SELL
+    today_action = None
+    for t in trades:
+        if t['date'] == last_date and t['action'] in ['BUY', 'SELL']:
+            today_action = t['action']
+            break
+
+    if today_action:
+        # daily_test.py 裡面的股票皆為 AI 核心股 (is_ai_stock=True)
+        line_msg = generate_trade_signal_msg(
+            date=last_date,
+            stock_id=STOCK_ID,
+            action=today_action,
+            price=last_close_price,
+            is_ai_stock=False 
+        )
+        send_line_message(line_msg)
+        print(f"今日 ({last_date}) {STOCK_ID} 觸發 {today_action} 訊號，已發送 LINE 通知。")
+    else:
+        print(f"今日 ({last_date}) {STOCK_ID} 無買賣訊號，維持現有狀態，不發送通知。")
+
+print("\n所有標的每日跟進完畢含手續費、夏普比率、同期持有最大回撤比較、LINE推播判斷")
