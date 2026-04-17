@@ -6,9 +6,6 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# ==========================================
-# ⚙️ 1. 環境設定與標的定義
-# ==========================================
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
 load_dotenv(env_path)
@@ -28,7 +25,6 @@ STOCK_DICT = {
     "2412": "中華電 (2412)"
 }
 
-# 定義 LSTM 核心預測標的
 AI_STOCKS = ["2330", "2454", "2317"]
 
 st.sidebar.title("策略參數與展示")
@@ -150,7 +146,7 @@ def color_profit(val):
 
 format_dict = {'qty': '{:,.0f} 股', 'price': '${:,.2f}', 'actual_cost': '${:,.2f}', 'profit': '${:,.0f}', 'profit_pct': '{:.2f}%'}
 
-# 🌟 全新設計：雙層專業數據儀表板
+# 數據儀表板
 def render_performance_dashboard(kpi_data, df_k, df_t):
     # 第一層：獲利能力
     st.subheader("絕對獲利指標")
@@ -160,13 +156,13 @@ def render_performance_dashboard(kpi_data, df_k, df_t):
     c3.metric("策略勝率", f"{kpi_data.get('win_rate', 0)}%", f"交易總數 {kpi_data.get('total_trades', 0)} 次")
     c4.metric("單檔固定本金", f"${kpi_data.get('max_capital', 1000000):,.0f}")
 
-    # 第二層：風險控制 (護身符)
+    # 風險控制
     st.subheader("風控與波動指標")
     cA, cB, cC, cD = st.columns(4)
     cA.metric("策略夏普比率", f"{kpi_data.get('sharpe_ratio', 0):.4f}")
     cB.metric("單純持有夏普比率", f"{kpi_data.get('hold_sharpe_ratio', 0):.4f}")
     
-    # 計算 MDD 避開了多少跌幅
+    # 計算 MDD 避開多少跌幅
     mdd = kpi_data.get('max_drawdown_pct', 0)
     hold_mdd = kpi_data.get('hold_max_drawdown_pct', 0)
     mdd_saved = abs(hold_mdd) - abs(mdd)
@@ -178,12 +174,11 @@ def render_performance_dashboard(kpi_data, df_k, df_t):
     st.plotly_chart(create_kline_chart(df_k, df_t), use_container_width=True, config={'scrollZoom': True})
 
     if not df_t.empty:
-        # 加入 actual_cost 顯示真實交易成本
+        #actual_cost交易成本
         df_show = df_t[['date', 'action', 'qty', 'price', 'actual_cost', 'profit', 'profit_pct']].copy()
         df_show['date'] = df_show['date'].dt.strftime('%Y-%m-%d')
         st.dataframe(df_show.style.map(color_profit, subset=['profit', 'profit_pct']).format(format_dict), use_container_width=True, height=300)
 
-# 5. 頁面渲染分流
 if is_ai_stock:
     tab1, tab2, tab3 = st.tabs(["第一部分：LSTM 模型預測驗證", "第二部分：策略回測績效", "第三部分：實盤動態追蹤"])
 
@@ -230,6 +225,10 @@ else:
 st.markdown("---")
 st.header("系統專屬量化分析助理")
 
+
+if "is_processing" not in st.session_state:
+    st.session_state.is_processing = False
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -238,54 +237,66 @@ for msg in st.session_state.messages:
         st.write(msg["content"])
 
 if prompt := st.chat_input("請輸入您選擇的股票進行詢問，例如：請幫我解讀此檔股票目前的夏普比率與最大回撤。"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.write(prompt)
+    
+    # 🔒 [新增] 檢查鎖的狀態：如果還在跑，就擋下來！
+    if st.session_state.is_processing:
+        st.warning("⚠️ AI 正在努力分析中，請勿重複送出問題！")
+    else:
+        # 🔒 [新增] 上鎖：宣告系統開始執行
+        st.session_state.is_processing = True
 
-    with st.chat_message("assistant"):
-        with st.spinner("正在整合系統歷史回測與風險評估數據..."):
-            try:
-                # 【修改點 1】先找環境變數，找不到再去 st.secrets 找，用 try 裝起來避免本機噴錯
-                api_key = os.getenv('gemini_api') 
-                if not api_key:
-                    try:
-                        api_key = st.secrets["gemini_api"]
-                    except:
-                        api_key = None
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.write(prompt)
 
-                if not api_key:
-                    st.error("no api key")
-                else:
-                    genai.configure(api_key=api_key)
-                    # 【修改點 2】改用你要的 gemini-2.5-flash
-                    model = genai.GenerativeModel('gemini-2.5-flash')
-                    
-                    group_desc = "配備 LSTM 預測模型的 AI 核心標的" if is_ai_stock else "未配備 AI 之純技術分析對照組標的"
-                    
-                    # 將全新的風控數據餵給 LLM
-                    system_context = f"""
-                    你現在是這套「量化交易系統」的專屬數據分析師。用語必須客觀、專業，著重於風險控管與摩擦成本的分析。
-                    目前使用者正在查看的股票是：{STOCK_DICT.get(selected_id, '未知')} ({group_desc})。
-                    
-                    【當前系統核心數據】
-                    1. 實盤狀態：{current_status} (HOLDING 代表持倉中，EMPTY 代表空手)
-                    2. 策略總報酬率：{kpi_daily.get('total_return_pct', 0)}% (同期單純持有：{kpi_daily.get('hold_return_pct', 0)}%)
-                    3. 累積淨利(已扣手續費)：{kpi_daily.get('total_profit', 0)} 元
-                    4. 策略勝率：{kpi_daily.get('win_rate', 0)}%
-                    5. 策略夏普比率：{kpi_daily.get('sharpe_ratio', 0)} (同期單純持有夏普：{kpi_daily.get('hold_sharpe_ratio', 0)})
-                    6. 策略最大回撤(MDD)：{kpi_daily.get('max_drawdown_pct', 0)}% (同期單純持有MDD：{kpi_daily.get('hold_max_drawdown_pct', 0)}%)
-                    
-                    請根據上述真實數據回答使用者問題。嚴禁捏造數據。特別注意如果策略的 MDD 絕對值小於大盤，代表策略成功展現了避險與抗跌能力。
-                    使用者的問題是：{prompt}
-                    """
-                    
-                    response = model.generate_content(system_context)
-                    st.write(response.text)
-                    st.session_state.messages.append({"role": "assistant", "content": response.text})
-            # 【修改點 3】加上流量限制攔截，防止無限轉圈死機
-            except Exception as e:
-                err = str(e)
-                if "429" in err or "Quota" in err:
-                    st.warning("流量達到上限（每分鐘 15 次）請稍候 1 分鐘後再發問。")
-                else:
-                    st.error(f"連線異常，錯誤細節：{err}")
+        with st.chat_message("assistant"):
+            with st.spinner("正在整合系統歷史回測與風險評估數據..."):
+                try:
+
+                    api_key = os.getenv('gemini_api') 
+                    if not api_key:
+                        try:
+                            api_key = st.secrets["gemini_api"]
+                        except:
+                            api_key = None
+
+                    if not api_key:
+                        st.error("no api key")
+                    else:
+                        genai.configure(api_key=api_key)
+                        # 指定模型
+                        model = genai.GenerativeModel('gemini-3.1-flash-lite-preview')
+                        
+                        group_desc = "配備 LSTM 預測模型的 AI 核心標的" if is_ai_stock else "未配備 AI 之純技術分析對照組標的"
+                        
+                        # LLM
+                        system_context = f"""
+                        你現在是這套「量化交易系統」的專屬數據分析師。用語必須客觀、專業，著重於風險控管與摩擦成本的分析。
+                        目前使用者正在查看的股票是：{STOCK_DICT.get(selected_id, '未知')} ({group_desc})。
+                        
+                        【當前系統核心數據】
+                        1. 實盤狀態：{current_status} (HOLDING 代表持倉中，EMPTY 代表空手)
+                        2. 策略總報酬率：{kpi_daily.get('total_return_pct', 0)}% (同期單純持有：{kpi_daily.get('hold_return_pct', 0)}%)
+                        3. 累積淨利(已扣手續費)：{kpi_daily.get('total_profit', 0)} 元
+                        4. 策略勝率：{kpi_daily.get('win_rate', 0)}%
+                        5. 策略夏普比率：{kpi_daily.get('sharpe_ratio', 0)} (同期單純持有夏普：{kpi_daily.get('hold_sharpe_ratio', 0)})
+                        6. 策略最大回撤(MDD)：{kpi_daily.get('max_drawdown_pct', 0)}% (同期單純持有MDD：{kpi_daily.get('hold_max_drawdown_pct', 0)}%)
+                        
+                        請根據上述真實數據回答使用者問題。嚴禁捏造數據。特別注意如果策略的 MDD 絕對值小於大盤，代表策略成功展現了避險與抗跌能力。
+                        使用者的問題是：{prompt}
+                        """
+                        
+                        response = model.generate_content(system_context)
+                        st.write(response.text)
+                        st.session_state.messages.append({"role": "assistant", "content": response.text})
+                
+                
+                except Exception as e:
+                    err = str(e)
+                    if "429" in err or "Quota" in err:
+                        st.warning("⚠️ 流量達到上限（每分鐘 5 次）。請稍候 1 分鐘後再發問！")
+                    else:
+                        st.error(f"連線異常，錯誤細節：{err}")
+                
+                finally:
+                    st.session_state.is_processing = False
