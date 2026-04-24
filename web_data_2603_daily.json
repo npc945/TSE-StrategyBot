@@ -6,9 +6,9 @@
         "total_return_pct": 13.54,
         "win_rate": 47.62,
         "total_trades": 21,
-        "sharpe_ratio": 0.3991,
-        "hold_sharpe_ratio": 0.8256,
-        "hold_return_pct": 86.98,
+        "sharpe_ratio": 0.3988,
+        "hold_sharpe_ratio": 0.8275,
+        "hold_return_pct": 87.44,
         "max_drawdown_pct": -15.41,
         "hold_max_drawdown_pct": -31.86,
         "current_status": "EMPTY"
