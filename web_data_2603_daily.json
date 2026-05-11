@@ -6,12 +6,12 @@
         "total_return_pct": 13.54,
         "win_rate": 47.62,
         "total_trades": 21,
-        "sharpe_ratio": 0.3961,
-        "hold_sharpe_ratio": 0.87,
-        "hold_return_pct": 96.74,
+        "sharpe_ratio": 0.3893,
+        "hold_sharpe_ratio": 0.881,
+        "hold_return_pct": 99.07,
         "max_drawdown_pct": -15.41,
         "hold_max_drawdown_pct": -31.86,
-        "current_status": "EMPTY"
+        "current_status": "HOLDING"
     },
     "trades": [
         {
@@ -391,6 +391,15 @@
             "actual_cost": 203.1,
             "profit": 14739.2,
             "profit_pct": 2.95
+        },
+        {
+            "date": "2026-05-11",
+            "action": "BUY",
+            "qty": 2333,
+            "price": 214.0,
+            "actual_cost": 214.3,
+            "profit": 0.0,
+            "profit_pct": 0.0
         }
     ]
 }
