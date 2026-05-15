@@ -37,9 +37,11 @@ selected_features = ["Trading_Volume","Bias_20"]#"MACD_diff","Trading_Volume",
 # 資料前處理
 engine = create_engine(CONN_STR)
 cols_sql = ', '.join(selected_features)
-sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID}"
+#修正：2025-10-23以前的資料
+sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID} AND date <= '2025-10-23'"
 df = pd.read_sql(sql, engine)
 df["date"] = pd.to_datetime(df["date"])
+df = df[df["date"] <= "2025-10-23"]
 df = df.sort_values("date").reset_index(drop=True)
 
 # 🌟 修正特徵滯後：為了避免未來函數，所有特徵往後推一天
@@ -56,8 +58,8 @@ df['target'] = (df['future_max_5d'] > df['close'] * 1.04).astype(int)
 df = df.dropna().reset_index(drop=True)
 
 test_split_idx = int(len(df) * 0.8)
-df_dev = df.iloc[:test_split_idx].copy()  # 開發集 (用來做 Cross-Validation)
-df_test = df.iloc[test_split_idx:].copy() # 測試集 (最終考卷)
+df_dev = df.iloc[:test_split_idx].copy()  # 開發集
+df_test = df.iloc[test_split_idx:].copy() # 測試集 
 print(f"開發集樣本數 (Development Set): {len(df_dev)}")
 print(f"測試集樣本數 (Hold-out Test):   {len(df_test)}")
 
@@ -107,7 +109,7 @@ for fold, (train_index, val_index) in enumerate(tscv.split(X_dev_raw)):
               validation_data=(X_val_3d, y_val_3d), callbacks=[early_stop], verbose=0)
     
     pred_prob = model.predict(X_val_3d, verbose=0)
-    pred_class = (pred_prob > 0.5).astype(int)
+    pred_class = (pred_prob > 0.6).astype(int)
     acc = accuracy_score(y_val_3d, pred_class)
     cv_scores.append(acc)
     

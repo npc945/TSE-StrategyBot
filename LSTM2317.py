@@ -145,7 +145,7 @@ final_model.fit(X_train_final, y_train_final, epochs=EPOCHS, batch_size=BATCH_SI
 
 print("\n📊 [Step 4] 最終測試結果 (Hold-out Test Evaluation)")
 y_pred_prob = final_model.predict(X_test_3d, verbose=0)
-y_pred_class = (y_pred_prob > 0.6).astype(int)
+y_pred_class = (y_pred_prob > 0.5).astype(int)
 
 final_acc = accuracy_score(y_test_3d, y_pred_class)
 final_prec = precision_score(y_test_3d, y_pred_class, zero_division=0)
@@ -161,6 +161,6 @@ print(conf_matrix)
 print("模型預測漲的次數:", np.sum(y_pred_class == 1))
 print("測試集總筆數:", len(y_test_3d))
 
-final_model.save("2317_model.h5")
-scaler_filename = "2317_scaler.pkl"
-joblib.dump(scaler_final, scaler_filename)
+# final_model.save("2317_model.h5")
+# scaler_filename = "2317_scaler.pkl"
+# joblib.dump(scaler_final, scaler_filename)
