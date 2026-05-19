@@ -35,11 +35,15 @@ N_SPLITS   = 5
 selected_features = ["Trading_Volume","Bias_20"]#"MACD_diff","Trading_Volume",
 
 # 資料前處理
+# 資料前處理
 engine = create_engine(CONN_STR)
 cols_sql = ', '.join(selected_features)
-sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID}"
+
+#修正：2025-10-23以前的資料
+sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID} AND date <= '2025-10-23'"
 df = pd.read_sql(sql, engine)
 df["date"] = pd.to_datetime(df["date"])
+df = df[df["date"] <= "2025-10-23"]
 df = df.sort_values("date").reset_index(drop=True)
 
 # 🌟 修正特徵滯後：為了避免未來函數，所有特徵往後推一天
@@ -145,7 +149,7 @@ final_model.fit(X_train_final, y_train_final, epochs=EPOCHS, batch_size=BATCH_SI
 
 print("\n📊 [Step 4] 最終測試結果 (Hold-out Test Evaluation)")
 y_pred_prob = final_model.predict(X_test_3d, verbose=0)
-y_pred_class = (y_pred_prob > 0.5).astype(int)
+y_pred_class = (y_pred_prob > 0.6).astype(int)
 
 final_acc = accuracy_score(y_test_3d, y_pred_class)
 final_prec = precision_score(y_test_3d, y_pred_class, zero_division=0)

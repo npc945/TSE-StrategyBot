@@ -37,9 +37,12 @@ selected_features = ["RSI_14","Bias_20"]#"MACD_diff","Trading_Volume",
 # 資料前處理
 engine = create_engine(CONN_STR)
 cols_sql = ', '.join(selected_features)
-sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID}"
+
+#修正：2025-10-23以前的資料
+sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID} AND date <= '2025-10-23'"
 df = pd.read_sql(sql, engine)
 df["date"] = pd.to_datetime(df["date"])
+df = df[df["date"] <= "2025-10-23"]
 df = df.sort_values("date").reset_index(drop=True)
 
 # 🌟 修正特徵滯後：為了避免未來函數，所有特徵往後推一天
@@ -161,6 +164,6 @@ print(conf_matrix)
 print("模型預測漲的次數:", np.sum(y_pred_class == 1))
 print("測試集總筆數:", len(y_test_3d))
 
-final_model.save("2454_model.h5")
-scaler_filename = "2454_scaler.pkl"
-joblib.dump(scaler_final, scaler_filename)
+# final_model.save("2454_model.h5")
+# scaler_filename = "2454_scaler.pkl"
+# joblib.dump(scaler_final, scaler_filename)
