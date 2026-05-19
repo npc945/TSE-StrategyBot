@@ -238,11 +238,11 @@ for msg in st.session_state.messages:
 
 if prompt := st.chat_input("請輸入您選擇的股票進行詢問，例如：請幫我解讀此檔股票目前的夏普比率與最大回撤。"):
     
-    # 🔒 [新增] 檢查鎖的狀態：如果還在跑，就擋下來！
+    #  [新增] 檢查
     if st.session_state.is_processing:
-        st.warning("⚠️ AI 正在努力分析中，請勿重複送出問題！")
+        st.warning(" AI 正在努力分析中，請勿重複送出問題！")
     else:
-        # 🔒 [新增] 上鎖：宣告系統開始執行
+        # 宣告系統開始執行
         st.session_state.is_processing = True
 
         st.session_state.messages.append({"role": "user", "content": prompt})

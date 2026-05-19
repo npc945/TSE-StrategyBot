@@ -13,6 +13,7 @@ import random
 import os
 from dotenv import load_dotenv
 import joblib
+
 SEED = 42
 os.environ['PYTHONHASHSEED'] = str(SEED)
 random.seed(SEED)
@@ -37,6 +38,7 @@ selected_features = ["Trading_Volume","Bias_20"]#"MACD_diff","Trading_Volume",
 # 資料前處理
 engine = create_engine(CONN_STR)
 cols_sql = ', '.join(selected_features)
+
 #修正：2025-10-23以前的資料
 sql = f"SELECT date, close, {cols_sql} FROM {TABLE} WHERE stock_id={STOCK_ID} AND date <= '2025-10-23'"
 df = pd.read_sql(sql, engine)
@@ -44,22 +46,22 @@ df["date"] = pd.to_datetime(df["date"])
 df = df[df["date"] <= "2025-10-23"]
 df = df.sort_values("date").reset_index(drop=True)
 
-# 🌟 修正特徵滯後：為了避免未來函數，所有特徵往後推一天
+# 修正特徵滯後：為了避免未來函數，所有特徵往後推一天
 for c in selected_features:
     df[c] = df[c].shift(1)
 
-# 抓出「從明天開始算，未來 10 天內的最高價」
 df['future_max_5d'] = df['close'].rolling(window=20).max().shift(-20)
 
-# 考卷答案：未來 5 天內的高點，只要大於今天收盤價的 2%，這筆交易就值得做 (標記為 1)
+# 20day y or n > 4% 
 df['target'] = (df['future_max_5d'] > df['close'] * 1.04).astype(int)
 
-# 砍掉有 NaN 的資料 (最前面因為 shift(1) 會有 1 筆，最後面因為 shift(-5) 會有 5 筆)
+# 砍掉有nan的資料 
 df = df.dropna().reset_index(drop=True)
 
 test_split_idx = int(len(df) * 0.8)
-df_dev = df.iloc[:test_split_idx].copy()  # 開發集
+df_dev = df.iloc[:test_split_idx].copy()  # 開發集 
 df_test = df.iloc[test_split_idx:].copy() # 測試集 
+
 print(f"開發集樣本數 (Development Set): {len(df_dev)}")
 print(f"測試集樣本數 (Hold-out Test):   {len(df_test)}")
 
@@ -83,7 +85,6 @@ def build_model(input_shape):
                   metrics=['accuracy'])
     return model
 
-print("\n🔄 執行 Walk-Forward Cross Validation (5-Fold)...")
 
 X_dev_raw = df_dev[selected_features].values
 y_dev_raw = df_dev["target"].values
@@ -109,16 +110,15 @@ for fold, (train_index, val_index) in enumerate(tscv.split(X_dev_raw)):
               validation_data=(X_val_3d, y_val_3d), callbacks=[early_stop], verbose=0)
     
     pred_prob = model.predict(X_val_3d, verbose=0)
-    pred_class = (pred_prob > 0.6).astype(int)
+    pred_class = (pred_prob > 0.5).astype(int)
     acc = accuracy_score(y_val_3d, pred_class)
     cv_scores.append(acc)
     
     print(f"   Fold {fold+1}: Accuracy = {acc:.4f}")
+print(f"平均交叉驗證準確率: {np.mean(cv_scores):.4f}")
 
-print(f"🎯 平均驗證準確率 (Average CV Accuracy): {np.mean(cv_scores):.4f}")
 
-
-print("\n🚀 [Step 3] 執行最終模型訓練 (Retrain on Full Dev Set)...")
+print("訓練")
 
 scaler_final = MinMaxScaler()
 X_dev_s = scaler_final.fit_transform(X_dev_raw)
@@ -144,7 +144,7 @@ final_model.fit(X_train_final, y_train_final, epochs=EPOCHS, batch_size=BATCH_SI
                 validation_data=(X_val_final, y_val_final),
                 callbacks=[early_stop], verbose=1)
 
-print("\n📊 [Step 4] 最終測試結果 (Hold-out Test Evaluation)")
+print("測試結果")
 y_pred_prob = final_model.predict(X_test_3d, verbose=0)
 y_pred_class = (y_pred_prob > 0.5).astype(int)
 
@@ -153,10 +153,9 @@ final_prec = precision_score(y_test_3d, y_pred_class, zero_division=0)
 conf_matrix = confusion_matrix(y_test_3d, y_pred_class)
 
 print("="*40)
-print(f"方向準確率 (Accuracy) : {final_acc:.4f}")
 print(f"訊號精確率 (Precision): {final_prec:.4f}")
 print("="*40)
-print("混淆矩陣 (Confusion Matrix):")
+print("混淆矩陣:")
 print(conf_matrix)
 
 print("模型預測漲的次數:", np.sum(y_pred_class == 1))

@@ -26,7 +26,7 @@ for id in stock_id:
     df['SMA_10'] = df.ta.sma(length=10)
     df['SMA_20'] = df.ta.sma(length=20)
     
-    # --- 計算乖離率 (Bias) ---
+    #  計算乖離率 (Bias) 
     df['Bias_20'] = (df['close'] - df['SMA_20']) / df['SMA_20']
 
     # 計算14日RSI

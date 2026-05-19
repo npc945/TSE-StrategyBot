@@ -9,17 +9,15 @@ import warnings
 import json
 warnings.filterwarnings('ignore')
 
-# ==========================================
-# 📱 [新增] LINE 推播模組與文案生成函數
-# ==========================================
+# LINE推播
 try:
     from line import send_line_message
 except ImportError:
-    print("⚠️ 找不到 line.py 模組，LINE 通知將被忽略。")
+    print("找不到 line.py 模組，LINE 通知將被忽略。")
     def send_line_message(msg): pass
 
 def generate_trade_signal_msg(date, stock_id, action, price, is_ai_stock):
-    # 建立股票名稱字典，讓 LINE 顯示更好看
+    # stock dict
     name_dict = {"2330": "台積電", "2454": "聯發科", "2317": "鴻海", "2382": "廣達", "2308": "台達電", "2881": "富邦金", "2603": "長榮", "1301": "台塑", "1513": "中興電", "2412": "中華電"}
     stock_name = name_dict.get(stock_id, "台股")
 
@@ -60,9 +58,7 @@ def generate_trade_signal_msg(date, stock_id, action, price, is_ai_stock):
 本系統訊號僅供歷史回測與學術參考。就算跟單還是會有市場波動風險，請投資人自行評估並謹慎操作。"""
     return msg
 
-# ==========================================
-# ⚙️ 1. 環境設定與股票字典
-# ==========================================
+# 環境設定
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
 load_dotenv(env_path)
@@ -71,7 +67,7 @@ sql_engine_url = os.getenv('sql_engine')
 LOOK_BACK = 20
 TOTAL_CAPITAL = 1000000  # 本金100萬
 
-# 手續費設定（台股）
+# 手續費
 BUY_FEE  = 0.001425
 SELL_FEE = 0.001425 + 0.003
 
@@ -83,9 +79,7 @@ STOCK_CONFIG = {
 
 engine = create_engine(sql_engine_url)
 
-# ==========================================
-# 🚦 2. 策略濾網函數
-# ==========================================
+# 策略濾網
 def get_lights(data, i, ai_threshold):
     l = 0
     if data['AI_Prob'].iloc[i] > ai_threshold: l += 1
@@ -113,9 +107,7 @@ def check_exit(data, i):
         exit_lights += 1
     return exit_lights >= 2
 
-# ==========================================
-# 🚀 3. 自動化巡迴主引擎
-# ==========================================
+
 for STOCK_ID, config in STOCK_CONFIG.items():
     print(f"\n{'='*40}")
     print(f"🔄 正在執行每日跟進：{STOCK_ID}")
@@ -129,7 +121,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
         model  = load_model(f"{STOCK_ID}_model.h5")
         scaler = joblib.load(f"{STOCK_ID}_scaler.pkl")
     except Exception as e:
-        print(f"❌ 找不到 {STOCK_ID} 的模型或 Scaler 檔案，跳過此檔。錯誤: {e}")
+        print(f"找不到 {STOCK_ID} 的模型或 Scaler 檔案，跳過此檔。錯誤: {e}")
         continue
 
     df_all = pd.read_sql(f"SELECT * FROM stock_data WHERE stock_id={STOCK_ID} ORDER BY date", engine)
@@ -139,7 +131,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     try:
         start_idx = df_all[df_all['date'] >= TEST_START].index[0]
     except IndexError:
-        print(f"❌ 找不到 {STOCK_ID} 設定的起始日期 {TEST_START}，跳過。")
+        print(f"找不到 {STOCK_ID} 設定的起始日期 {TEST_START}，跳過。")
         continue
 
     df_test_period = df_all.iloc[start_idx - LOOK_BACK:].copy().reset_index(drop=True)
@@ -227,9 +219,9 @@ for STOCK_ID, config in STOCK_CONFIG.items():
             day_value = TOTAL_CAPITAL + realized_profit
         daily_values.append(day_value)
 
-    # ==========================================
-    # 📊 4. 績效指標計算
-    # ==========================================
+   
+    # 績效指標計算
+  
     trade_df    = pd.DataFrame(trades)
     sell_trades = trade_df[trade_df['action'] == 'SELL'] if not trade_df.empty else pd.DataFrame()
     win_rate    = (len(sell_trades[sell_trades['profit'] > 0]) / len(sell_trades) * 100) if len(sell_trades) > 0 else 0.0
@@ -252,21 +244,19 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     hold_drawdown     = (hold_series - hold_rolling_max) / hold_rolling_max
     hold_max_drawdown = hold_drawdown.min() * 100
 
-    print(f"💰 累積淨利（含手續費）: ${total_profit:,.0f}")
-    print(f"📈 總報酬率            : {total_profit_pct:.2f}%")
-    print(f"🏆 勝率                : {win_rate:.2f}%")
+    print(f" 累積淨利（含手續費）: ${total_profit:,.0f}")
+    print(f" 總報酬率            : {total_profit_pct:.2f}%")
+    print(f" 勝率                : {win_rate:.2f}%")
     print(f"────────────────────────────────")
-    print(f"📐 策略夏普比率（年化）: {sharpe:.4f}")
-    print(f"📐 持有夏普比率（年化）: {hold_sharpe:.4f}  ← 同期單純持有")
+    print(f" 策略夏普比率（年化）: {sharpe:.4f}")
+    print(f" 持有夏普比率（年化）: {hold_sharpe:.4f}  ← 同期單純持有")
     print(f"────────────────────────────────")
-    print(f"📉 策略最大回撤        : {max_drawdown:.2f}%")
-    print(f"📉 持有最大回撤        : {hold_max_drawdown:.2f}%  ← 同期單純持有")
+    print(f" 策略最大回撤        : {max_drawdown:.2f}%")
+    print(f" 持有最大回撤        : {hold_max_drawdown:.2f}%  ← 同期單純持有")
     print(f"────────────────────────────────")
-    print(f"📈 單純持有報酬率      : {hold_return_pct:.2f}%  ← 同期單純持有")
+    print(f" 單純持有報酬率      : {hold_return_pct:.2f}%  ← 同期單純持有")
 
-    # ==========================================
-    # 💾 5. 匯出 JSON / CSV
-    # ==========================================
+  
     kpi_data = {
         "stock_id"          : STOCK_ID,
         "max_capital"       : float(TOTAL_CAPITAL),
@@ -294,14 +284,14 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
     df_kline.to_csv(f"web_kline_{STOCK_ID}_daily.csv", index=False)
 
-    # ==========================================
-    # 📱 [新增] 6. LINE 每日最新訊號過濾與發送
-    # ==========================================
-    # 鎖定迴圈最後一天的日期與價格，確保絕不重複發送舊歷史訊號
+
+    # LINE訊號發送
+
+    # 鎖定最後一天的日期價格，目的為不重複發送舊歷史訊號
     last_date = df_res['date'].iloc[-1].strftime('%Y-%m-%d')
     last_close_price = df_res['close'].iloc[-1]
 
-    # 尋找「最後一天」是否有觸發 BUY 或 SELL
+    
     today_action = None
     for t in trades:
         if t['date'] == last_date and t['action'] in ['BUY', 'SELL']:
@@ -309,7 +299,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
             break
 
     if today_action:
-        # daily_test.py 裡面的股票皆為 AI 核心股 (is_ai_stock=True)
+        
         line_msg = generate_trade_signal_msg(
             date=last_date,
             stock_id=STOCK_ID,
@@ -322,4 +312,4 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     else:
         print(f"今日 ({last_date}) {STOCK_ID} 無買賣訊號，維持現有狀態，不發送通知。")
 
-print("\n所有標的每日跟進完畢（含手續費、夏普比率、同期持有最大回撤比較、LINE推播判斷）！")
+print("\n所有標的每日跟進完畢")

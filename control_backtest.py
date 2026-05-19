@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 try:
     from line import send_line_message
 except ImportError:
-    print("⚠️ 找不到 line.py 模組，LINE 通知將被忽略。")
+    print(" 找不到 line.py 模組，LINE 通知將被忽略。")
     def send_line_message(msg): pass
 
 def generate_trade_signal_msg(date, stock_id, action, price, is_ai_stock):
@@ -56,9 +56,7 @@ def generate_trade_signal_msg(date, stock_id, action, price, is_ai_stock):
 本系統訊號僅供歷史回測與學術參考。就算跟單還是會有市場波動風險，請投資人自行評估並謹慎操作。"""
     return msg
 
-# ==========================================
-# ⚙️ 1. 環境設定與對照組股票字典
-# ==========================================
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
 load_dotenv(env_path)
@@ -83,9 +81,7 @@ STOCK_CONFIG = {
 
 engine = create_engine(sql_engine_url)
 
-# ==========================================
-# 🚦 2. 純技術面策略濾網函數
-# ==========================================
+
 def get_lights(data, i):
     l = 0
     if data['ADX_14'].iloc[i] > 20: l += 1
@@ -112,9 +108,7 @@ def check_exit(data, i):
         exit_lights += 1
     return exit_lights >= 2
 
-# ==========================================
-# 🚀 3. 對照組自動化巡迴主引擎
-# ==========================================
+
 for STOCK_ID, config in STOCK_CONFIG.items():
     print(f"\n{'='*40}")
     print(f"🔄 正在執行傳統對照組回測：{STOCK_ID}")
@@ -200,7 +194,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
                     'profit'     : round(float(unrealized_profit), 2),
                     'profit_pct' : round(unrealized_pct, 2)
                 })
-                print(f"📌 {STOCK_ID} 狀態：持倉中！帳面盈虧（含手續費）${unrealized_profit:,.0f}")
+                print(f" {STOCK_ID} 狀態：持倉中！帳面盈虧（含手續費）${unrealized_profit:,.0f}")
 
         if holding_qty > 0:
             est_sell  = df_res['close'].iloc[i] * (1 - SELL_FEE)
@@ -209,9 +203,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
             day_value = TOTAL_CAPITAL + realized_profit
         daily_values.append(day_value)
 
-    # ==========================================
-    # 📊 4. 績效指標計算
-    # ==========================================
+    #  績效指標計算
     trade_df    = pd.DataFrame(trades)
     sell_trades = trade_df[trade_df['action'] == 'SELL'] if not trade_df.empty else pd.DataFrame()
     win_rate    = (len(sell_trades[sell_trades['profit'] > 0]) / len(sell_trades) * 100) if len(sell_trades) > 0 else 0.0
@@ -227,7 +219,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     drawdown     = (daily_series - rolling_max) / rolling_max
     max_drawdown = drawdown.min() * 100
 
-    # 🌟 同期單純持有：夏普、報酬率、最大回撤 (這裡幫你補齊了！)
+    
     hold_returns    = df_res['close'].pct_change().dropna()
     hold_sharpe     = (hold_returns.mean() / hold_returns.std()) * np.sqrt(252) if hold_returns.std() > 0 else 0.0
     hold_return_pct = ((df_res['close'].iloc[-1] - df_res['close'].iloc[0]) / df_res['close'].iloc[0]) * 100
@@ -237,21 +229,20 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     hold_drawdown     = (hold_series - hold_rolling_max) / hold_rolling_max
     hold_max_drawdown = hold_drawdown.min() * 100
 
-    print(f"💰 累積淨利（含手續費）: ${total_profit:,.0f}")
-    print(f"📈 總報酬率            : {total_profit_pct:.2f}%")
-    print(f"🏆 勝率                : {win_rate:.2f}%")
+    print(f" 累積淨利（含手續費）: ${total_profit:,.0f}")
+    print(f" 總報酬率            : {total_profit_pct:.2f}%")
+    print(f" 勝率                : {win_rate:.2f}%")
     print(f"────────────────────────────────")
-    print(f"📐 策略夏普比率（年化）: {sharpe:.4f}")
-    print(f"📐 持有夏普比率（年化）: {hold_sharpe:.4f}  ← 同期單純持有")
+    print(f" 策略夏普比率（年化）: {sharpe:.4f}")
+    print(f" 持有夏普比率（年化）: {hold_sharpe:.4f}  ← 同期單純持有")
     print(f"────────────────────────────────")
-    print(f"📉 策略最大回撤        : {max_drawdown:.2f}%")
-    print(f"📉 持有最大回撤        : {hold_max_drawdown:.2f}%  ← 同期單純持有")
+    print(f" 策略最大回撤        : {max_drawdown:.2f}%")
+    print(f" 持有最大回撤        : {hold_max_drawdown:.2f}%  ← 同期單純持有")
     print(f"────────────────────────────────")
-    print(f"📈 單純持有報酬率      : {hold_return_pct:.2f}%  ← 同期單純持有")
+    print(f" 單純持有報酬率      : {hold_return_pct:.2f}%  ← 同期單純持有")
 
-    # ==========================================
-    # 💾 5. 匯出 JSON / CSV
-    # ==========================================
+    
+   
     kpi_data = {
         "stock_id"          : STOCK_ID,
         "max_capital"       : float(TOTAL_CAPITAL),
@@ -263,7 +254,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
         "hold_sharpe_ratio" : round(hold_sharpe, 4),
         "hold_return_pct"   : round(hold_return_pct, 2),
         "max_drawdown_pct"  : round(max_drawdown, 2),
-        "hold_max_drawdown_pct": round(hold_max_drawdown, 2), # 🌟 新增這裡！
+        "hold_max_drawdown_pct": round(hold_max_drawdown, 2), 
         "current_status"    : "HOLDING" if holding_qty > 0 else "EMPTY"
     }
 
@@ -279,14 +270,13 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
     df_kline.to_csv(f"web_kline_{STOCK_ID}_daily.csv", index=False)
 
- # ==========================================
-    # 📱 [新增] 6. LINE 每日最新訊號過濾與發送
-    # ==========================================
-    # 鎖定迴圈最後一天的日期與價格，確保絕不重複發送舊歷史訊號
+
+    # LINE訊號
+
     last_date = df_res['date'].iloc[-1].strftime('%Y-%m-%d')
     last_close_price = df_res['close'].iloc[-1]
 
-    # 尋找「最後一天」是否有觸發 BUY 或 SELL
+  
     today_action = None
     for t in trades:
         if t['date'] == last_date and t['action'] in ['BUY', 'SELL']:
@@ -294,7 +284,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
             break
 
     if today_action:
-        # daily_test.py 裡面的股票皆為 AI 核心股 (is_ai_stock=True)
+        
         line_msg = generate_trade_signal_msg(
             date=last_date,
             stock_id=STOCK_ID,
@@ -307,4 +297,4 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     else:
         print(f"今日 ({last_date}) {STOCK_ID} 無買賣訊號，維持現有狀態，不發送通知。")
 
-print("\n所有標的每日跟進完畢含手續費、夏普比率、同期持有最大回撤比較、LINE推播判斷")
+print("\n所有標的每日跟進完畢")

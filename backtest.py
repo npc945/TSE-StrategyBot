@@ -9,9 +9,7 @@ import warnings
 import json
 warnings.filterwarnings('ignore')
 
-# ==========================================
-# ⚙️ 1. 環境設定與股票參數
-# ==========================================
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(current_dir, "token.env")
 load_dotenv(env_path)
@@ -35,9 +33,7 @@ STOCK_CONFIG = {
 
 engine = create_engine(sql_engine_url)
 
-# ==========================================
-# 🚦 2. 策略濾網函數
-# ==========================================
+
 def get_lights(data, i, ai_threshold):
     l = 0
     if data['AI_Prob'].iloc[i] > ai_threshold: l += 1
@@ -65,13 +61,11 @@ def check_exit(data, i):
         exit_lights += 1
     return exit_lights >= 2
 
-# ==========================================
-# 🚀 3. 自動化巡迴回測主引擎
-# ==========================================
+
 for STOCK_ID, config in STOCK_CONFIG.items():
     print(f"\n{'='*50}")
-    print(f"🔄 正在執行專業回測：{STOCK_ID}")
-    print(f"📅 測試區間：{TEST_START} ~ {TEST_END}")
+    print(f" 正在執行專業回測：{STOCK_ID}")
+    print(f"測試區間：{TEST_START} ~ {TEST_END}")
     print(f"{'='*50}")
 
     AI_FEATURES  = config["features"]
@@ -93,7 +87,7 @@ for STOCK_ID, config in STOCK_CONFIG.items():
         end_df    = df_all[df_all['date'] <= TEST_END]
         end_idx   = end_df.index[-1]
     except IndexError:
-        print(f"❌ 找不到 {STOCK_ID} 指定的日期區間，跳過。")
+        print(f"找不到 {STOCK_ID} 指定的日期區間，跳過。")
         continue
 
     df_test_period = df_all.iloc[start_idx - LOOK_BACK: end_idx + 1].copy().reset_index(drop=True)
@@ -165,9 +159,8 @@ for STOCK_ID, config in STOCK_CONFIG.items():
             day_value = TOTAL_CAPITAL + realized_profit
         daily_values.append(day_value)
 
-    # ==========================================
-    # 4. 績效指標計算
-    # ==========================================
+
+    # 績效指標計算
     trade_df    = pd.DataFrame(trades)
     sell_trades = trade_df[trade_df['action'].str.contains('SELL')] if not trade_df.empty else pd.DataFrame()
     win_rate    = (len(sell_trades[sell_trades['profit'] > 0]) / len(sell_trades) * 100) if len(sell_trades) > 0 else 0.0
@@ -235,6 +228,6 @@ for STOCK_ID, config in STOCK_CONFIG.items():
     df_kline['date'] = df_kline['date'].dt.strftime('%Y-%m-%d')
     df_kline.to_csv(f"web_kline_{STOCK_ID}.csv", index=False)
 
-    print(f"✅ 成功匯出：web_data_{STOCK_ID}_proof.json 與 web_kline_{STOCK_ID}.csv")
+    print(f"成功匯出：web_data_{STOCK_ID}_proof.json 與 web_kline_{STOCK_ID}.csv")
 
-print("\n🚀 所有標的回測完成（含手續費、夏普比率、單純持有最大回撤比較），證明檔與 K 線檔皆已更新完畢！")
+print("\n 所有標的回測完成")
