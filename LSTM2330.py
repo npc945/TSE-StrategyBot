@@ -161,6 +161,6 @@ print(conf_matrix)
 print("模型預測漲的次數:", np.sum(y_pred_class == 1))
 print("測試集總筆數:", len(y_test_3d))
 
-# final_model.save("2330_model.h5")
-# scaler_filename = "2330_scaler.pkl"
-# joblib.dump(scaler_final, scaler_filename)
+final_model.save("2330_model.h5")
+scaler_filename = "2330_scaler.pkl"
+joblib.dump(scaler_final, scaler_filename)
