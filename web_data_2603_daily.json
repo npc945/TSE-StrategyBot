@@ -2,13 +2,13 @@
     "kpi": {
         "stock_id": "2603",
         "max_capital": 1000000.0,
-        "total_profit": 92950.1,
-        "total_return_pct": 9.3,
+        "total_profit": 125697.54,
+        "total_return_pct": 12.57,
         "win_rate": 45.45,
         "total_trades": 22,
-        "sharpe_ratio": 0.297,
-        "hold_sharpe_ratio": 0.8602,
-        "hold_return_pct": 97.21,
+        "sharpe_ratio": 0.3688,
+        "hold_sharpe_ratio": 0.8909,
+        "hold_return_pct": 103.72,
         "max_drawdown_pct": -17.28,
         "hold_max_drawdown_pct": -31.86,
         "current_status": "HOLDING"
@@ -420,13 +420,13 @@
             "profit_pct": 0.0
         },
         {
-            "date": "2026-05-21",
+            "date": "2026-05-22",
             "action": "HOLDING",
             "qty": 4699,
-            "price": 212.0,
-            "actual_cost": 211.06,
-            "profit": -8180.55,
-            "profit_pct": -0.82
+            "price": 219.0,
+            "actual_cost": 218.03,
+            "profit": 24566.9,
+            "profit_pct": 2.46
         }
     ]
 }
