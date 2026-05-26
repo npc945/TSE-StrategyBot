@@ -2,16 +2,16 @@
     "kpi": {
         "stock_id": "2382",
         "max_capital": 1000000.0,
-        "total_profit": -87190.51,
-        "total_return_pct": -8.72,
-        "win_rate": 41.67,
-        "total_trades": 36,
-        "sharpe_ratio": -0.0558,
-        "hold_sharpe_ratio": 0.455,
+        "total_profit": -90110.36,
+        "total_return_pct": -9.01,
+        "win_rate": 40.54,
+        "total_trades": 37,
+        "sharpe_ratio": -0.0557,
+        "hold_sharpe_ratio": 0.4547,
         "hold_return_pct": 31.87,
         "max_drawdown_pct": -29.18,
         "hold_max_drawdown_pct": -47.65,
-        "current_status": "HOLDING"
+        "current_status": "EMPTY"
     },
     "trades": [
         {
@@ -670,6 +670,15 @@
             "actual_cost": 316.95,
             "profit": 0.0,
             "profit_pct": 0.0
+        },
+        {
+            "date": "2026-05-26",
+            "action": "SELL",
+            "qty": 1577,
+            "price": 316.5,
+            "actual_cost": 315.1,
+            "profit": -2919.85,
+            "profit_pct": -0.58
         }
     ]
 }
