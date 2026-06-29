@@ -2,16 +2,16 @@
     "kpi": {
         "stock_id": "2317",
         "max_capital": 1000000.0,
-        "total_profit": 519800.0,
-        "total_return_pct": 51.98,
-        "win_rate": 35.53,
-        "total_trades": 76,
-        "sharpe_ratio": 1.0406,
-        "hold_sharpe_ratio": 1.144,
-        "hold_return_pct": 165.16,
+        "total_profit": 470391.0,
+        "total_return_pct": 47.04,
+        "win_rate": 35.0,
+        "total_trades": 80,
+        "sharpe_ratio": 0.9482,
+        "hold_sharpe_ratio": 0.9545,
+        "hold_return_pct": 123.08,
         "max_drawdown_pct": -26.7,
         "hold_max_drawdown_pct": -50.33,
-        "current_status": "HOLDING"
+        "current_status": "EMPTY"
     },
     "trades": [
         {
@@ -1392,13 +1392,67 @@
             "profit_pct": 0.0
         },
         {
-            "date": "2026-06-04",
-            "action": "HOLDING (持倉中)",
+            "date": "2026-06-05",
+            "action": "SELL",
             "qty": 2496,
-            "price": 293.0,
-            "actual_cost": 291.7,
-            "profit": 228180.51,
-            "profit_pct": 45.64
+            "price": 284.5,
+            "actual_cost": 283.24,
+            "profit": 207058.39,
+            "profit_pct": 41.42
+        },
+        {
+            "date": "2026-06-08",
+            "action": "BUY",
+            "qty": 1852,
+            "price": 269.5,
+            "actual_cost": 269.88,
+            "profit": 0.0,
+            "profit_pct": 0.0
+        },
+        {
+            "date": "2026-06-23",
+            "action": "SELL",
+            "qty": 1852,
+            "price": 259.5,
+            "actual_cost": 258.35,
+            "profit": -21357.87,
+            "profit_pct": -4.27
+        },
+        {
+            "date": "2026-06-24",
+            "action": "BUY",
+            "qty": 1950,
+            "price": 256.0,
+            "actual_cost": 256.36,
+            "profit": 0.0,
+            "profit_pct": 0.0
+        },
+        {
+            "date": "2026-06-25",
+            "action": "SELL",
+            "qty": 1950,
+            "price": 257.5,
+            "actual_cost": 256.36,
+            "profit": -8.26,
+            "profit_pct": -0.0
+        },
+        {
+            "date": "2026-06-26",
+            "action": "BUY",
+            "qty": 2009,
+            "price": 248.5,
+            "actual_cost": 248.85,
+            "profit": 0.0,
+            "profit_pct": 0.0
+        },
+        {
+            "date": "2026-06-29",
+            "action": "SELL",
+            "qty": 2009,
+            "price": 246.5,
+            "actual_cost": 245.41,
+            "profit": -6920.75,
+            "profit_pct": -1.38
         }
     ]
 }

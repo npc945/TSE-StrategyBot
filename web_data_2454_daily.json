@@ -2,16 +2,16 @@
     "kpi": {
         "stock_id": "2454",
         "max_capital": 1000000.0,
-        "total_profit": 1540420.0,
-        "total_return_pct": 154.04,
-        "win_rate": 39.02,
-        "total_trades": 82,
-        "sharpe_ratio": 1.615,
-        "hold_sharpe_ratio": 1.7685,
-        "hold_return_pct": 542.03,
+        "total_profit": 1506333.25,
+        "total_return_pct": 150.63,
+        "win_rate": 40.48,
+        "total_trades": 84,
+        "sharpe_ratio": 1.5415,
+        "hold_sharpe_ratio": 1.6025,
+        "hold_return_pct": 466.67,
         "max_drawdown_pct": -17.85,
         "hold_max_drawdown_pct": -33.93,
-        "current_status": "HOLDING"
+        "current_status": "EMPTY"
     },
     "trades": [
         {
@@ -1500,13 +1500,31 @@
             "profit_pct": 0.0
         },
         {
-            "date": "2026-06-04",
-            "action": "HOLDING (持倉中)",
+            "date": "2026-06-25",
+            "action": "SELL",
             "qty": 293,
-            "price": 4430.0,
-            "actual_cost": 4410.4,
-            "profit": 293159.72,
-            "profit_pct": 29.34
+            "price": 4310.0,
+            "actual_cost": 4290.93,
+            "profit": 258155.3,
+            "profit_pct": 25.84
+        },
+        {
+            "date": "2026-06-26",
+            "action": "BUY",
+            "qty": 128,
+            "price": 3880.0,
+            "actual_cost": 3885.53,
+            "profit": 0.0,
+            "profit_pct": 0.0
+        },
+        {
+            "date": "2026-06-29",
+            "action": "SELL",
+            "qty": 128,
+            "price": 3910.0,
+            "actual_cost": 3892.7,
+            "profit": 917.66,
+            "profit_pct": 0.18
         }
     ]
 }
