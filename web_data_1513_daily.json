@@ -6,8 +6,8 @@
         "total_return_pct": 24.13,
         "win_rate": 43.75,
         "total_trades": 16,
-        "sharpe_ratio": 0.5792,
-        "hold_sharpe_ratio": 0.5842,
+        "sharpe_ratio": 0.5788,
+        "hold_sharpe_ratio": 0.5838,
         "hold_return_pct": 53.91,
         "max_drawdown_pct": -22.83,
         "hold_max_drawdown_pct": -54.78,
@@ -312,7 +312,7 @@
             "profit_pct": 0.0
         },
         {
-            "date": "2026-06-30",
+            "date": "2026-07-01",
             "action": "HOLDING",
             "qty": 2954,
             "price": 177.0,
